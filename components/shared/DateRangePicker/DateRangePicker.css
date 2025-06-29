@@ -1,0 +1,112 @@
+.date-range-picker-wrapper {
+    position: relative;
+}
+
+.date-range-trigger {
+    padding: 0.5rem 1rem;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: black;
+    color: var(--white);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    min-height: 38px; /* Match input height */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.date-range-trigger:hover {
+    background-color: var(--popover-bg);
+    border-color: var(--popover-bg);
+}
+
+.date-range-popover {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    background-color: var(--popover-bg);
+    color: var(--popover-text);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    z-index: 100;
+    width: 500px; /* Wider popover */
+    display: flex;
+}
+
+.popover-sidebar {
+    padding: 0.5rem;
+    border-right: 1px solid var(--popover-border);
+    flex-shrink: 0;
+    width: 160px;
+}
+
+.popover-main {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.quick-ranges-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-range-item {
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: none;
+    color: var(--popover-text);
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: left;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.quick-range-item:hover {
+    background-color: var(--popover-hover-bg);
+}
+
+.popover-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--white);
+    border-bottom: 1px solid var(--popover-border);
+    padding-bottom: 0.5rem;
+}
+
+.absolute-range-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.absolute-range-form .form-group label {
+    color: var(--popover-text);
+    font-size: 0.875rem;
+}
+
+.absolute-range-form .form-group input[type="date"] {
+    background-color: #4a5568;
+    color: var(--white);
+    border: 1px solid var(--popover-border);
+}
+
+/* Style date input calendar icon for webkit browsers */
+.absolute-range-form .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.popover-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--popover-border);
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,0 +1,183 @@
+/* MARC Styles */
+.marc-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.marc-section h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.marc-fields-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.marc-field-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.marc-add-form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.marc-add-form select {
+    flex: 1 1 120px;
+}
+.marc-add-form input {
+    flex: 2 1 180px;
+}
+
+/* This is defined in Modal.css, but needed here if the form is not in a modal */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--secondary-color);
+}
+
+/* New Form Layout Styles */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+fieldset {
+    border: 1px solid var(--border-color);
+    padding: 1rem 1.5rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    background-color: #fafafa;
+}
+
+fieldset:last-of-type {
+    margin-bottom: 0;
+}
+
+fieldset legend {
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    color: var(--primary-color);
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    /* Special placement for grid */
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+    background: #fff;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    height: 1.25rem;
+    width: 1.25rem;
+    flex-shrink: 0;
+}
+
+.form-group-checkbox label {
+    font-weight: normal;
+    margin: 0;
+}
+
+
+/* Tag Input Styles */
+.tag-input-section {
+    margin-top: 1.5rem;
+}
+.tag-input-section:first-of-type {
+    margin-top: 0;
+}
+
+.tag-input-section h5 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    min-height: 40px;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+}
+
+.tag-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--white);
+    opacity: 0.7;
+    margin-left: 0.5rem;
+    padding: 0;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.tag-item button:hover {
+    opacity: 1;
+}
+
+.tag-add-form {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.tag-add-form input {
+    flex-grow: 1;
+}
+
+/* Validation Styles */
+.field-error-message {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-group input.has-error, .form-group textarea.has-error {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 1px var(--danger-color);
+}
+
+.form-group input.has-error:focus, .form-group textarea.has-error:focus {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+}

@@ -1,0 +1,6 @@
+.assets-container {
+  background: var(--white);
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+}

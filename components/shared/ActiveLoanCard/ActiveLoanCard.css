@@ -1,0 +1,7 @@
+/* This can reuse most styles from LoanHistoryCard.css */
+@import url('../LoanHistoryCard/LoanHistoryCard.css');
+
+.loan-card .loan-actions {
+    flex: 1 1 100px;
+    text-align: right;
+}

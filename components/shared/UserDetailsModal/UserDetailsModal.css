@@ -1,0 +1,57 @@
+.user-details-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.user-details-section {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--secondary-color);
+}
+.user-details-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.user-details-section h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.user-details-section p {
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.details-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: var(--text-color);
+}
+
+.details-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+}
+
+.details-list-date {
+    font-size: 0.85rem;
+    color: #3b567c; /* Darker gray for better contrast */
+    white-space: nowrap;
+    padding-left: 1rem;
+}
+
+.empty-details-message {
+    font-style: italic;
+    color: #4b5563; /* Darker gray for better contrast */
+}

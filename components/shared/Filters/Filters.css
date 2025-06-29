@@ -1,0 +1,75 @@
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative; /* For popover positioning */
+}
+
+.filter-group label {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.filter-group input, .filter-group select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.search-filter {
+    flex: 2 1 250px;
+}
+
+.status-filter {
+    flex: 1 1 150px;
+}
+
+.type-filter {
+    flex: 3 1 300px;
+}
+
+.clear-filter {
+    flex-shrink: 0;
+}
+
+.type-filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.type-filter-tags input[type="checkbox"] {
+    display: none;
+}
+
+.type-filter-tags label {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.type-filter-tags label:hover {
+    background-color: var(--secondary-color);
+}
+
+.type-filter-tags input[type="checkbox"]:checked + label {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+}

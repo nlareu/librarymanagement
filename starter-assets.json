@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Dune",
+    "type": "Libro",
+    "description": "Una novela de ciencia ficción sobre la búsqueda de un joven noble en un planeta desértico."
+  },
+  {
+    "title": "The Matrix",
+    "type": "Película",
+    "description": "Un hacker informático aprende sobre la verdadera naturaleza de su realidad."
+  },
+  {
+    "title": "Abbey Road",
+    "type": "Álbum",
+    "description": "El undécimo álbum de estudio de la banda de rock inglesa The Beatles."
+  },
+  {
+    "title": "The Legend of Zelda: Breath of the Wild",
+    "type": "Videojuego",
+    "description": "Un juego de acción y aventura ambientado en un mundo abierto masivo."
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "type": "Libro",
+    "description": "Una novela de Harper Lee ambientada en el sur de Estados Unidos durante la década de 1930."
+  },
+  {
+    "title": "Blade Runner 2049",
+    "type": "Película",
+    "description": "El descubrimiento de un secreto enterrado durante mucho tiempo por parte de un joven blade runner lo lleva a buscar a un ex blade runner que ha estado desaparecido durante 30 años."
+  },
+  {
+    "title": "Rumours",
+    "type": "Álbum",
+    "description": "El undécimo álbum de estudio de la banda de rock británico-estadounidense Fleetwood Mac."
+  },
+  {
+    "title": "Red Dead Redemption 2",
+    "type": "Videojuego",
+    "description": "Una historia épica de la vida en el implacable corazón de Estados Unidos."
+  },
+  {
+    "title": "1984",
+    "type": "Libro",
+    "description": "Una novela distópica de ciencia ficción social de George Orwell."
+  },
+  {
+    "title": "The Dark Knight",
+    "type": "Película",
+    "description": "Cuando la amenaza conocida como el Joker causa estragos en Gotham, Batman debe aceptar una de las mayores pruebas psicológicas y físicas de su capacidad para luchar contra la injusticia."
+  }
+]

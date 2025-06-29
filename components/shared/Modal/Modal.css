@@ -1,0 +1,64 @@
+/*
+    The .modal-overlay rule has been removed.
+    Centering is now handled natively by the <dialog> element when opened with .showModal().
+*/
+
+.modal-content {
+    background: var(--white);
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 500px;
+    border: none;
+}
+
+/* 
+    Style the native backdrop pseudo-element.
+    This replaces the old .modal-overlay div.
+*/
+.modal-content::backdrop {
+    background-color: var(--overlay-color);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+    font-size: 1.25rem;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 0 0.5rem;
+    line-height: 1;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-body p {
+    margin-bottom: 1rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--secondary-color);
+}

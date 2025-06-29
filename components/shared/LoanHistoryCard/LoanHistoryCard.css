@@ -1,0 +1,52 @@
+.loan-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loan-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.loan-card:hover {
+  border-color: var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  background-color: #fafafa;
+}
+
+.loan-info {
+    flex: 2 1 250px;
+}
+
+.loan-dates {
+    flex: 2 1 250px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+.loan-dates p {
+    margin: 0.25rem 0;
+}
+
+.loan-status {
+    flex: 1 1 100px;
+    text-align: right;
+}
+
+.loan-asset-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.loan-user-name {
+    font-size: 1rem;
+    color: #4b5563;
+}

@@ -1,0 +1,137 @@
+.asset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.asset-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.asset-card:hover {
+  border-color: var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  background-color: #fafafa;
+}
+
+.asset-info {
+    flex: 3 1 300px;
+    min-width: 0;
+}
+
+.asset-status {
+    flex: 2 1 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: flex-start;
+}
+
+.asset-actions {
+    flex: 1 1 150px;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.asset-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.1rem;
+}
+
+.asset-author {
+    font-size: 1rem;
+    font-style: italic;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.asset-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.asset-type-tag, .asset-signature, .asset-isbn {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4b5563;
+    background-color: #e5e7eb;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.asset-description {
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+.asset-availability {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+.availability-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.asset-availability.available {
+    color: #059669;
+}
+.asset-availability.available .availability-dot {
+    background-color: var(--success-color);
+}
+.asset-availability.unavailable {
+    color: #9ca3af;
+}
+.asset-availability.unavailable .availability-dot {
+    background-color: #9ca3af;
+}
+
+.borrower-info {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.return-date-info {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.asset-marc-fields {
+    flex-basis: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--secondary-color);
+}
+
+.asset-marc-fields h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.marc-field-entry {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.marc-field-entry strong {
+    font-weight: 600;
+}

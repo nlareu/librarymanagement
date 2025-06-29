@@ -1,0 +1,28 @@
+[
+  {
+    "userCode": "84-0001",
+    "name": "Alice",
+    "lastName": "Johnson",
+    "type": "Estudiante",
+    "grade": "10º Grado"
+  },
+  {
+    "userCode": "84-0002",
+    "name": "Bob",
+    "lastName": "Williams",
+    "type": "Profesor"
+  },
+  {
+    "userCode": "84-0003",
+    "name": "Charlie",
+    "lastName": "Brown",
+    "type": "Estudiante",
+    "grade": "8º Grado"
+  },
+  {
+    "userCode": "84-0004",
+    "name": "Diana",
+    "lastName": "Miller",
+    "type": "Personal"
+  }
+]
