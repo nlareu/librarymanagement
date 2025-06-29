@@ -40,15 +40,15 @@ function getDatabasePath(): string {
       homeDir,
       "Library",
       "Application Support",
-      "com.tauri.dev"
+      "com.library.management"
     );
   } else if (platform === "win32") {
     appDataDir = path.join(
       process.env.APPDATA || path.join(homeDir, "AppData", "Roaming"),
-      "com.tauri.dev"
+      "com.library.management"
     );
   } else {
-    appDataDir = path.join(homeDir, ".local", "share", "com.tauri.dev");
+    appDataDir = path.join(homeDir, ".local", "share", "com.library.management");
   }
 
   // Create directory if it doesn't exist

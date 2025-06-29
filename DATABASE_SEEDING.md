@@ -41,9 +41,9 @@ npm run seed:fresh
 
 The script automatically detects the database location based on your operating system:
 
-- **macOS**: `~/Library/Application Support/com.tauri.dev/library.db`
-- **Windows**: `%APPDATA%/com.tauri.dev/library.db`
-- **Linux**: `~/.local/share/com.tauri.dev/library.db`
+- **macOS**: `~/Library/Application Support/com.library.management/library.db`
+- **Windows**: `%APPDATA%/com.library.management/library.db`
+- **Linux**: `~/.local/share/com.library.management/library.db`
 
 ## Troubleshooting
 
