@@ -26,7 +26,7 @@ export async function loadInitialData() {
 
 export async function addAsset(assetData: AssetFormData): Promise<Asset[]> {
   console.log("api.addAsset called with:", assetData);
-  
+
   const newAsset: Asset = {
     id: crypto.randomUUID(),
     title: assetData.title,
@@ -52,13 +52,13 @@ export async function addAsset(assetData: AssetFormData): Promise<Asset[]> {
 
   const currentAssets = await db.getAssets();
   console.log("Current assets:", currentAssets);
-  
+
   const updatedAssets = [...currentAssets, newAsset];
   console.log("About to save assets:", updatedAssets);
-  
+
   await db.saveAssets(updatedAssets);
   console.log("Assets saved successfully");
-  
+
   return updatedAssets;
 }
 
