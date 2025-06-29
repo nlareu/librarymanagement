@@ -61,3 +61,7 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# Tauri specific
+/src-tauri/target/
+/src-tauri/Cargo.lock

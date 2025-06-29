@@ -16,7 +16,7 @@ import { UserForm } from "./components/shared/UserForm/UserForm";
 import { HistoryView } from "./components/pages/history/HistoryView";
 import { UserDetailsModal } from "./components/shared/UserDetailsModal/UserDetailsModal";
 import { stripMarcPrefix } from "./utils";
-import { useLibraryData } from "./hooks/useLibraryData";
+import { useLibraryData } from "./hooks/useTauriLibraryData";
 import { useCollectionFilters } from "./components/pages/collection/useCollectionFilters";
 import { useHistoryFilters } from "./components/pages/history/useHistoryFilters";
 
