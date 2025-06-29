@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { invoke } from "@tauri-apps/api/core";
-import { loadStarterData } from "../initial-data";
 import type {
   Asset,
   User,
@@ -117,53 +116,17 @@ export const saveCompletedLoanHistory = async (
 export async function initDb() {
   try {
     console.log("Initializing database...");
-    // Initialize the database first
+    // Initialize the database
     await invoke("init_database");
-    console.log("Database initialization command completed");
+    console.log("Database initialization completed");
 
-    // Check if any data exists
-    console.log("Getting stored assets...");
-    const storedAssets = await getAssets();
-    console.log("Retrieved assets:", storedAssets);
-
-    if (storedAssets.length === 0) {
-      console.log("No data found in database. Initializing with starter data.");
-      try {
-        const {
-          initialAssets,
-          initialUsers,
-          initialActiveLoans,
-          initialCompletedLoans,
-        } = await loadStarterData();
-
-        await saveAssets(initialAssets);
-        await saveUsers(initialUsers);
-        await saveActiveLoans(initialActiveLoans);
-        await saveCompletedLoanHistory(initialCompletedLoans);
-
-        return {
-          assets: initialAssets,
-          users: initialUsers,
-          activeLoans: initialActiveLoans,
-          completedLoanHistory: initialCompletedLoans,
-        };
-      } catch (err) {
-        console.error("Failed to initialize starter data:", err);
-        return {
-          assets: [],
-          users: [],
-          activeLoans: [],
-          completedLoanHistory: [],
-        };
-      }
-    } else {
-      return {
-        assets: await getAssets(),
-        users: await getUsers(),
-        activeLoans: await getActiveLoans(),
-        completedLoanHistory: await getCompletedLoanHistory(),
-      };
-    }
+    // Return current data from database
+    return {
+      assets: await getAssets(),
+      users: await getUsers(),
+      activeLoans: await getActiveLoans(),
+      completedLoanHistory: await getCompletedLoanHistory(),
+    };
   } catch (err) {
     console.error("Failed to initialize database:", err);
     return {

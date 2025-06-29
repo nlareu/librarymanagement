@@ -2,7 +2,6 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import { loadStarterData } from "../initial-data";
 import type {
   Asset,
   User,
@@ -70,44 +69,11 @@ export const saveCompletedLoanHistory = (history: LoanHistoryRecord[]) =>
 // --- Initialization ---
 
 export async function initDb() {
-  const storedAssets = getFromStorage(ASSETS_KEY);
-  // Check if any data exists. If not, load starter data.
-  if (storedAssets === null) {
-    console.log(
-      "No data found in localStorage. Initializing with starter data."
-    );
-    try {
-      const {
-        initialAssets,
-        initialUsers,
-        initialActiveLoans,
-        initialCompletedLoans,
-      } = await loadStarterData();
-      saveAssets(initialAssets);
-      saveUsers(initialUsers);
-      saveActiveLoans(initialActiveLoans);
-      saveCompletedLoanHistory(initialCompletedLoans);
-      return {
-        assets: initialAssets,
-        users: initialUsers,
-        activeLoans: initialActiveLoans,
-        completedLoanHistory: initialCompletedLoans,
-      };
-    } catch (err) {
-      console.error("Failed to initialize starter data:", err);
-      return {
-        assets: [],
-        users: [],
-        activeLoans: [],
-        completedLoanHistory: [],
-      };
-    }
-  } else {
-    return {
-      assets: getAssets(),
-      users: getUsers(),
-      activeLoans: getActiveLoans(),
-      completedLoanHistory: getCompletedLoanHistory(),
-    };
-  }
+  // Simply return current data from localStorage
+  return {
+    assets: getAssets(),
+    users: getUsers(),
+    activeLoans: getActiveLoans(),
+    completedLoanHistory: getCompletedLoanHistory(),
+  };
 }
