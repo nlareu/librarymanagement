@@ -1,4 +1,4 @@
-name: Build Tauri App
+name: Build Tauri App for Windows 7
 
 on:
   push:
@@ -7,46 +7,50 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-windows7:
     strategy:
       matrix:
-        platform: [ubuntu-latest, windows-latest, macos-latest]
+        platform: [windows-2019]
 
     runs-on: ${{ matrix.platform }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js (Windows 7 compatible)
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "16"
           cache: "npm"
 
-      - name: Setup Rust
+      - name: Setup Rust (Windows 7 compatible)
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Setup MSVC (Windows 7 compatible)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: "2019"
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
 
-      - name: Install dependencies (Ubuntu)
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev
-
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Build Tauri app
+      - name: Build Tauri app for Windows 7
         run: npm run tauri build
+        env:
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
-      - name: Upload artifacts
+      - name: Upload Windows 7 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-app-${{ matrix.platform }}
+          name: tauri-app-windows7
           path: |
             src-tauri/target/release/bundle/
             !src-tauri/target/release/bundle/**/.*
