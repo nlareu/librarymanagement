@@ -48,7 +48,12 @@ function getDatabasePath(): string {
       "com.library.management"
     );
   } else {
-    appDataDir = path.join(homeDir, ".local", "share", "com.library.management");
+    appDataDir = path.join(
+      homeDir,
+      ".local",
+      "share",
+      "com.library.management"
+    );
   }
 
   // Create directory if it doesn't exist
