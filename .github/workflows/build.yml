@@ -10,7 +10,7 @@ jobs:
   build-windows7:
     strategy:
       matrix:
-        platform: [windows-2019]
+        platform: [windows-2022]
         arch: [x64, x86]
 
     runs-on: ${{ matrix.platform }}
@@ -32,7 +32,7 @@ jobs:
       - name: Setup MSVC (Windows 7 compatible)
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          vsversion: "2019"
+          vsversion: "2022"
           arch: ${{ matrix.arch }}
 
       - name: Rust cache
