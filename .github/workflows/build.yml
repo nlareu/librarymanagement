@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         platform: [windows-2019]
+        arch: [x64, x86]
 
     runs-on: ${{ matrix.platform }}
 
@@ -26,12 +27,13 @@ jobs:
       - name: Setup Rust (Windows 7 compatible)
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: x86_64-pc-windows-msvc
+          targets: ${{ matrix.arch == 'x86' && 'i686-pc-windows-msvc' || 'x86_64-pc-windows-msvc' }}
 
       - name: Setup MSVC (Windows 7 compatible)
         uses: ilammy/msvc-dev-cmd@v1
         with:
           vsversion: "2019"
+          arch: ${{ matrix.arch }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -41,16 +43,16 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Build Tauri app for Windows 7
-        run: npm run tauri build
+      - name: Build Tauri app for Windows 7 (${{ matrix.arch }})
+        run: npm run tauri build -- --target ${{ matrix.arch == 'x86' && 'i686-pc-windows-msvc' || 'x86_64-pc-windows-msvc' }}
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
-      - name: Upload Windows 7 artifacts
+      - name: Upload Windows 7 artifacts (${{ matrix.arch }})
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-app-windows7
+          name: tauri-app-windows7-${{ matrix.arch }}
           path: |
             src-tauri/target/release/bundle/
             !src-tauri/target/release/bundle/**/.*
