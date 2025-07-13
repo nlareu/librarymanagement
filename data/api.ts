@@ -10,6 +10,7 @@ import type {
   ActiveLoan,
   LoanHistoryRecord,
   UserChange,
+  AssetChange,
 } from "../entities/index";
 import type { AssetFormData } from "../components/shared/AssetForm/types";
 import type { UserFormData } from "../components/shared/UserForm/types";
@@ -48,6 +49,38 @@ export function addAsset(assetData: AssetFormData): Asset[] {
     copies: parseInt(assetData.copies) || 1,
     isLoanable: assetData.isLoanable,
   };
+
+  // Track the change
+  const assetChange: AssetChange = {
+    id: crypto.randomUUID(),
+    changeType: "CREATE",
+    assetId: newAsset.id,
+    timestamp: new Date().toISOString(),
+    newData: {
+      title: newAsset.title,
+      type: newAsset.type,
+      description: newAsset.description,
+      registrationNumber: newAsset.registrationNumber,
+      signature: newAsset.signature,
+      isbn: newAsset.isbn,
+      author: newAsset.author,
+      publisher: newAsset.publisher,
+      publicationPlace: newAsset.publicationPlace,
+      edition: newAsset.edition,
+      publicationYear: newAsset.publicationYear,
+      collectionTitle: newAsset.collectionTitle,
+      collectionNumber: newAsset.collectionNumber,
+      volumes: (newAsset.volumes || 1).toString(),
+      copies: (newAsset.copies || 1).toString(),
+      isLoanable: newAsset.isLoanable,
+      subjects: newAsset.subjects,
+      ibicSubjects: newAsset.ibicSubjects,
+    },
+    synced: false,
+  };
+
+  db.addAssetChange(assetChange);
+
   const currentAssets = db.getAssets();
   const updatedAssets = [...currentAssets, newAsset];
   db.saveAssets(updatedAssets);
@@ -58,7 +91,17 @@ export function updateAsset(
   assetId: string,
   updatedData: AssetFormData
 ): Asset[] {
+  const currentAssets = db.getAssets();
+  const assetIndex = currentAssets.findIndex((asset) => asset.id === assetId);
+
+  if (assetIndex === -1) {
+    throw new Error(`Asset with id ${assetId} not found`);
+  }
+
+  const oldAsset = currentAssets[assetIndex];
+
   const updatedAsset = {
+    ...oldAsset,
     title: updatedData.title,
     description: updatedData.description,
     isbn: updatedData.isbn,
@@ -79,16 +122,100 @@ export function updateAsset(
     isLoanable: updatedData.isLoanable,
   };
 
-  const currentAssets = db.getAssets();
-  const updatedAssets = currentAssets.map((a) =>
-    a.id === assetId ? { ...a, ...updatedAsset } : a
-  );
+  // Track the change
+  const assetChange: AssetChange = {
+    id: crypto.randomUUID(),
+    changeType: "UPDATE",
+    assetId: assetId,
+    timestamp: new Date().toISOString(),
+    oldData: {
+      title: oldAsset.title,
+      type: oldAsset.type,
+      description: oldAsset.description,
+      registrationNumber: oldAsset.registrationNumber,
+      signature: oldAsset.signature,
+      isbn: oldAsset.isbn,
+      author: oldAsset.author,
+      publisher: oldAsset.publisher,
+      publicationPlace: oldAsset.publicationPlace,
+      edition: oldAsset.edition,
+      publicationYear: oldAsset.publicationYear,
+      collectionTitle: oldAsset.collectionTitle,
+      collectionNumber: oldAsset.collectionNumber,
+      volumes: (oldAsset.volumes || 1).toString(),
+      copies: (oldAsset.copies || 1).toString(),
+      isLoanable: oldAsset.isLoanable,
+      subjects: oldAsset.subjects,
+      ibicSubjects: oldAsset.ibicSubjects,
+    },
+    newData: {
+      title: updatedAsset.title,
+      type: updatedAsset.type,
+      description: updatedAsset.description,
+      registrationNumber: updatedAsset.registrationNumber,
+      signature: updatedAsset.signature,
+      isbn: updatedAsset.isbn,
+      author: updatedAsset.author,
+      publisher: updatedAsset.publisher,
+      publicationPlace: updatedAsset.publicationPlace,
+      edition: updatedAsset.edition,
+      publicationYear: updatedAsset.publicationYear,
+      collectionTitle: updatedAsset.collectionTitle,
+      collectionNumber: updatedAsset.collectionNumber,
+      volumes: (updatedAsset.volumes || 1).toString(),
+      copies: (updatedAsset.copies || 1).toString(),
+      isLoanable: updatedAsset.isLoanable,
+      subjects: updatedAsset.subjects,
+      ibicSubjects: updatedAsset.ibicSubjects,
+    },
+    synced: false,
+  };
+
+  db.addAssetChange(assetChange);
+
+  const updatedAssets = [...currentAssets];
+  updatedAssets[assetIndex] = updatedAsset;
   db.saveAssets(updatedAssets);
   return updatedAssets;
 }
 
 export function deleteAsset(assetId: string) {
   const currentAssets = db.getAssets();
+  const assetToDelete = currentAssets.find((a) => a.id === assetId);
+
+  if (assetToDelete) {
+    // Track the change
+    const assetChange: AssetChange = {
+      id: crypto.randomUUID(),
+      changeType: "DELETE",
+      assetId: assetId,
+      timestamp: new Date().toISOString(),
+      oldData: {
+        title: assetToDelete.title,
+        type: assetToDelete.type,
+        description: assetToDelete.description,
+        registrationNumber: assetToDelete.registrationNumber,
+        signature: assetToDelete.signature,
+        isbn: assetToDelete.isbn,
+        author: assetToDelete.author,
+        publisher: assetToDelete.publisher,
+        publicationPlace: assetToDelete.publicationPlace,
+        edition: assetToDelete.edition,
+        publicationYear: assetToDelete.publicationYear,
+        collectionTitle: assetToDelete.collectionTitle,
+        collectionNumber: assetToDelete.collectionNumber,
+        volumes: (assetToDelete.volumes || 1).toString(),
+        copies: (assetToDelete.copies || 1).toString(),
+        isLoanable: assetToDelete.isLoanable,
+        subjects: assetToDelete.subjects,
+        ibicSubjects: assetToDelete.ibicSubjects,
+      },
+      synced: false,
+    };
+
+    db.addAssetChange(assetChange);
+  }
+
   const updatedAssets = currentAssets.filter((a) => a.id !== assetId);
   db.saveAssets(updatedAssets);
 
@@ -302,4 +429,26 @@ export function returnLoan(loanId: string, returnDate: string) {
   db.saveActiveLoans(updatedActiveLoans);
 
   return { updatedActiveLoans, updatedHistory };
+}
+
+// --- Asset Change Operations ---
+
+export function getPendingAssetChanges(): AssetChange[] {
+  return db.getPendingAssetChanges();
+}
+
+export function markAssetChangesSynced(changeIds: string[]): void {
+  db.markAssetChangesSynced(changeIds);
+}
+
+export function getAllAssetChanges(): AssetChange[] {
+  return db.getAssetChanges();
+}
+
+export function clearUserChanges(): void {
+  db.saveUserChanges([]);
+}
+
+export function clearAssetChanges(): void {
+  db.saveAssetChanges([]);
 }

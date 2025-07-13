@@ -6,13 +6,20 @@ import { useState } from "react";
 import {
   fetchUserDataSpreadsheet,
   syncUserChangesToUserDataSpreadsheet,
+  fetchAssetsDataSpreadsheet,
+  syncAssetChangesToAssetsDataSpreadsheet,
 } from "../../../data/spreadsheet";
-import { saveUsers } from "../../../data/db";
+import { saveUsers, saveAssets } from "../../../data/db";
 import {
   getPendingUserChanges,
   markUserChangesSynced,
+  getPendingAssetChanges,
+  markAssetChangesSynced,
+  clearUserChanges,
+  clearAssetChanges,
 } from "../../../data/api";
 import type { User } from "../../../entities/User";
+import type { Asset } from "../../../entities/Asset";
 import "./SyncView.css";
 import { messages } from "./messages";
 
@@ -21,16 +28,16 @@ export function SyncView() {
   const [syncStatus, setSyncStatus] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handleSyncDown = async () => {
+  const handleUserSyncDown = async () => {
     setIsSyncing(true);
-    setSyncStatus(messages.syncingDown);
+    setSyncStatus(messages.syncingUserDown);
     setErrorMessage("");
 
     try {
       const spreadsheetData = await fetchUserDataSpreadsheet();
 
       if (spreadsheetData.rows.length === 0) {
-        setSyncStatus(messages.noDataFound);
+        setSyncStatus(messages.noUserDataFound);
         return;
       }
 
@@ -47,27 +54,32 @@ export function SyncView() {
       // Save to local storage
       saveUsers(users);
       setSyncStatus(
-        messages.syncDownComplete.replace("{count}", users.length.toString())
+        messages.syncUserDownComplete.replace(
+          "{count}",
+          users.length.toString()
+        )
       );
     } catch (error) {
-      console.error("Error syncing down:", error);
-      setErrorMessage(messages.syncDownError + ": " + (error as Error).message);
+      console.error("Error syncing users down:", error);
+      setErrorMessage(
+        messages.syncUserDownError + ": " + (error as Error).message
+      );
       setSyncStatus("");
     } finally {
       setIsSyncing(false);
     }
   };
 
-  const handleSyncUp = async () => {
+  const handleUserSyncUp = async () => {
     setIsSyncing(true);
-    setSyncStatus(messages.syncingUp);
+    setSyncStatus(messages.syncingUserUp);
     setErrorMessage("");
 
     try {
       const pendingChanges = getPendingUserChanges();
 
       if (pendingChanges.length === 0) {
-        setSyncStatus(messages.noPendingChanges);
+        setSyncStatus(messages.noPendingUserChanges);
         return;
       }
 
@@ -94,14 +106,182 @@ export function SyncView() {
       markUserChangesSynced(changeIds);
 
       setSyncStatus(
-        messages.syncUpComplete.replace(
+        messages.syncUserUpComplete.replace(
           "{count}",
           pendingChanges.length.toString()
         )
       );
     } catch (error) {
-      console.error("Error syncing up:", error);
-      setErrorMessage(messages.syncUpError + ": " + (error as Error).message);
+      console.error("Error syncing users up:", error);
+      setErrorMessage(
+        messages.syncUserUpError + ": " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleAssetSyncDown = async () => {
+    setIsSyncing(true);
+    setSyncStatus(messages.syncingAssetDown);
+    setErrorMessage("");
+
+    try {
+      const spreadsheetData = await fetchAssetsDataSpreadsheet();
+
+      if (spreadsheetData.rows.length === 0) {
+        setSyncStatus(messages.noAssetDataFound);
+        return;
+      }
+
+      // Convert spreadsheet data to Asset objects
+      const assets: Asset[] = spreadsheetData.rows.map((row) => ({
+        id: row.id || crypto.randomUUID(),
+        title: row.title || "",
+        description: row.description || "",
+        isbn: row.isbn || "",
+        author: row.author || "",
+        publisher: row.publisher || "",
+        publicationPlace: row.publicationPlace || "",
+        edition: row.edition || "",
+        publicationYear: row.publicationYear || "",
+        collectionTitle: row.collectionTitle || "",
+        collectionNumber: row.collectionNumber || "",
+        subjects: row.subjects
+          ? row.subjects.split(",").map((s) => s.trim())
+          : [],
+        ibicSubjects: row.ibicSubjects
+          ? row.ibicSubjects.split(",").map((s) => s.trim())
+          : [],
+        type: (row.type as Asset["type"]) || "Libro",
+        registrationNumber: row.registrationNumber || "",
+        signature: row.signature || "",
+        volumes: parseInt(row.volumes) || 1,
+        copies: parseInt(row.copies) || 1,
+        isLoanable: row.isLoanable === "true" || row.isLoanable === "TRUE",
+      }));
+
+      // Save to local storage
+      saveAssets(assets);
+      setSyncStatus(
+        messages.syncAssetDownComplete.replace(
+          "{count}",
+          assets.length.toString()
+        )
+      );
+    } catch (error) {
+      console.error("Error syncing assets down:", error);
+      setErrorMessage(
+        messages.syncAssetDownError + ": " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleAssetSyncUp = async () => {
+    setIsSyncing(true);
+    setSyncStatus(messages.syncingAssetUp);
+    setErrorMessage("");
+
+    try {
+      const pendingChanges = getPendingAssetChanges();
+
+      if (pendingChanges.length === 0) {
+        setSyncStatus(messages.noPendingAssetChanges);
+        return;
+      }
+
+      // Convert changes to spreadsheet format
+      const changesToSync = pendingChanges.map((change) => ({
+        changeType: change.changeType,
+        assetId: change.assetId,
+        assetData: change.newData
+          ? {
+              id: change.assetId,
+              title: change.newData.title || "",
+              description: change.newData.description || "",
+              isbn: change.newData.isbn || "",
+              author: change.newData.author || "",
+              publisher: change.newData.publisher || "",
+              publicationPlace: change.newData.publicationPlace || "",
+              edition: change.newData.edition || "",
+              publicationYear: change.newData.publicationYear || "",
+              collectionTitle: change.newData.collectionTitle || "",
+              collectionNumber: change.newData.collectionNumber || "",
+              subjects: Array.isArray(change.newData.subjects)
+                ? change.newData.subjects.join(", ")
+                : change.newData.subjects || "",
+              ibicSubjects: Array.isArray(change.newData.ibicSubjects)
+                ? change.newData.ibicSubjects.join(", ")
+                : change.newData.ibicSubjects || "",
+              type: change.newData.type || "",
+              registrationNumber: change.newData.registrationNumber || "",
+              signature: change.newData.signature || "",
+              volumes: change.newData.volumes || "",
+              copies: change.newData.copies || "",
+              isLoanable: change.newData.isLoanable ? "true" : "false",
+            }
+          : undefined,
+      }));
+
+      await syncAssetChangesToAssetsDataSpreadsheet(changesToSync);
+
+      // Mark changes as synced
+      const changeIds = pendingChanges.map((change) => change.id);
+      markAssetChangesSynced(changeIds);
+
+      setSyncStatus(
+        messages.syncAssetUpComplete.replace(
+          "{count}",
+          pendingChanges.length.toString()
+        )
+      );
+    } catch (error) {
+      console.error("Error syncing assets up:", error);
+      setErrorMessage(
+        messages.syncAssetUpError + ": " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleClearUserChanges = async () => {
+    setIsSyncing(true);
+    setSyncStatus("Limpiando historial de cambios de usuarios...");
+    setErrorMessage("");
+
+    try {
+      clearUserChanges();
+      setSyncStatus(messages.clearUserChangesComplete);
+    } catch (error) {
+      console.error("Error clearing user changes:", error);
+      setErrorMessage(
+        "❌ Error al limpiar cambios de usuarios: " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleClearAssetChanges = async () => {
+    setIsSyncing(true);
+    setSyncStatus("Limpiando historial de cambios de activos...");
+    setErrorMessage("");
+
+    try {
+      clearAssetChanges();
+      setSyncStatus(messages.clearAssetChangesComplete);
+    } catch (error) {
+      console.error("Error clearing asset changes:", error);
+      setErrorMessage(
+        "❌ Error al limpiar cambios de activos: " + (error as Error).message
+      );
       setSyncStatus("");
     } finally {
       setIsSyncing(false);
@@ -117,30 +297,82 @@ export function SyncView() {
 
       <div className="sync-actions">
         <div className="sync-section">
-          <h3>{messages.syncDownTitle}</h3>
-          <p>{messages.syncDownDescription}</p>
+          <h3>{messages.userSyncDownTitle}</h3>
+          <p>{messages.userSyncDownDescription}</p>
           <button
             className="sync-button sync-down"
-            onClick={handleSyncDown}
+            onClick={handleUserSyncDown}
             disabled={isSyncing}
           >
-            {isSyncing && syncStatus === messages.syncingDown
+            {isSyncing && syncStatus === messages.syncingUserDown
               ? messages.syncing
-              : messages.syncDownButton}
+              : messages.userSyncDownButton}
           </button>
         </div>
 
         <div className="sync-section">
-          <h3>{messages.syncUpTitle}</h3>
-          <p>{messages.syncUpDescription}</p>
+          <h3>{messages.userSyncUpTitle}</h3>
+          <p>{messages.userSyncUpDescription}</p>
           <button
             className="sync-button sync-up"
-            onClick={handleSyncUp}
+            onClick={handleUserSyncUp}
             disabled={isSyncing}
           >
-            {isSyncing && syncStatus === messages.syncingUp
+            {isSyncing && syncStatus === messages.syncingUserUp
               ? messages.syncing
-              : messages.syncUpButton}
+              : messages.userSyncUpButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.assetSyncDownTitle}</h3>
+          <p>{messages.assetSyncDownDescription}</p>
+          <button
+            className="sync-button sync-down"
+            onClick={handleAssetSyncDown}
+            disabled={isSyncing}
+          >
+            {isSyncing && syncStatus === messages.syncingAssetDown
+              ? messages.syncing
+              : messages.assetSyncDownButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.assetSyncUpTitle}</h3>
+          <p>{messages.assetSyncUpDescription}</p>
+          <button
+            className="sync-button sync-up"
+            onClick={handleAssetSyncUp}
+            disabled={isSyncing}
+          >
+            {isSyncing && syncStatus === messages.syncingAssetUp
+              ? messages.syncing
+              : messages.assetSyncUpButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.clearUserChangesTitle}</h3>
+          <p>{messages.clearUserChangesDescription}</p>
+          <button
+            className="sync-button clear-changes"
+            onClick={handleClearUserChanges}
+            disabled={isSyncing}
+          >
+            {messages.clearUserChangesButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.clearAssetChangesTitle}</h3>
+          <p>{messages.clearAssetChangesDescription}</p>
+          <button
+            className="sync-button clear-changes"
+            onClick={handleClearAssetChanges}
+            disabled={isSyncing}
+          >
+            {messages.clearAssetChangesButton}
           </button>
         </div>
       </div>

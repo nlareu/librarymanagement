@@ -32,7 +32,7 @@
   margin-bottom: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .sync-actions {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -96,6 +96,16 @@
 
 .sync-up:hover:not(:disabled) {
   background: #1e7e34;
+  transform: translateY(-1px);
+}
+
+.clear-changes {
+  background: #dc3545;
+  color: white;
+}
+
+.clear-changes:hover:not(:disabled) {
+  background: #c82333;
   transform: translateY(-1px);
 }
 

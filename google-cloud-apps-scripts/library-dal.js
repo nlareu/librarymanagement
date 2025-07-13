@@ -95,9 +95,9 @@ function doPost(e) {
     if (action === "syncChanges") {
       // Handle syncing user changes
       result = handleSyncChanges(sheet, data);
-    } else if (action === "replaceAll") {
-      // Handle replacing all data
-      result = handleReplaceAll(sheet, data);
+    } else if (action === "syncAssetChanges") {
+      // Handle syncing asset changes
+      result = handleSyncAssetChanges(sheet, data);
     } else {
       // Default behavior: append a single row
       const headers = sheet.getDataRange().getValues()[0];
@@ -280,4 +280,107 @@ function handleReplaceAll(sheet, allData) {
     status: "success",
     message: `Successfully replaced all data with ${allData.length} records.`,
   };
+}
+
+/**
+ * Handles syncing asset changes to the spreadsheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {Array} changes Array of asset changes to apply.
+ * @returns {Object} Success response.
+ */
+function handleSyncAssetChanges(sheet, changes) {
+  for (const change of changes) {
+    switch (change.changeType) {
+      case "CREATE":
+        if (change.assetData) {
+          appendAssetRow(sheet, change.assetData);
+        }
+        break;
+      case "UPDATE":
+        if (change.assetData) {
+          updateAssetRow(sheet, change.assetId, change.assetData);
+        }
+        break;
+      case "DELETE":
+        deleteAssetRow(sheet, change.assetId);
+        break;
+    }
+  }
+
+  return {
+    status: "success",
+    message: `Successfully processed ${changes.length} asset changes.`,
+  };
+}
+
+/**
+ * Appends a new asset row to the sheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {Object} assetData The asset data to append.
+ */
+function appendAssetRow(sheet, assetData) {
+  const headers = sheet.getDataRange().getValues()[0];
+  const newRow = [];
+  headers.forEach((header) => {
+    newRow.push(assetData[header] !== undefined ? assetData[header] : "");
+  });
+  sheet.appendRow(newRow);
+}
+
+/**
+ * Updates an existing asset row in the sheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {string} assetId The ID of the asset to update.
+ * @param {Object} assetData The new asset data.
+ */
+function updateAssetRow(sheet, assetId, assetData) {
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+  const headers = values[0];
+
+  // Find the row with the matching asset ID
+  const assetIdColIndex = headers.indexOf("id");
+  if (assetIdColIndex === -1) return; // No ID column found
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][assetIdColIndex] === assetId) {
+      // Update this row
+      const updatedRow = [];
+      headers.forEach((header) => {
+        updatedRow.push(
+          assetData[header] !== undefined
+            ? assetData[header]
+            : values[i][headers.indexOf(header)]
+        );
+      });
+
+      // Replace the entire row
+      const range = sheet.getRange(i + 1, 1, 1, headers.length);
+      range.setValues([updatedRow]);
+      break;
+    }
+  }
+}
+
+/**
+ * Deletes an asset row from the sheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {string} assetId The ID of the asset to delete.
+ */
+function deleteAssetRow(sheet, assetId) {
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+  const headers = values[0];
+
+  // Find the row with the matching asset ID
+  const assetIdColIndex = headers.indexOf("id");
+  if (assetIdColIndex === -1) return; // No ID column found
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][assetIdColIndex] === assetId) {
+      // Delete this row
+      sheet.deleteRow(i + 1);
+      break;
+    }
+  }
 }

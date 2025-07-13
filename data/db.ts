@@ -8,6 +8,7 @@ import type {
   ActiveLoan,
   LoanHistoryRecord,
   UserChange,
+  AssetChange,
 } from "../entities/index";
 
 const ASSETS_KEY = "libraryAssets";
@@ -15,6 +16,7 @@ const USERS_KEY = "libraryUsers";
 const ACTIVE_LOANS_KEY = "libraryActiveLoans";
 const COMPLETED_HISTORY_KEY = "libraryCompletedHistory";
 const USER_CHANGES_KEY = "libraryUserChanges";
+const ASSET_CHANGES_KEY = "libraryAssetChanges";
 
 // --- Configuration ---
 let config: { userCodePrefix: string } | null = null;
@@ -89,6 +91,29 @@ export const markUserChangesSynced = (changeIds: string[]) => {
 
 export const getPendingUserChanges = (): UserChange[] => {
   return getUserChanges().filter((change) => !change.synced);
+};
+
+export const getAssetChanges = (): AssetChange[] =>
+  getFromStorage<AssetChange[]>(ASSET_CHANGES_KEY) ?? [];
+export const saveAssetChanges = (changes: AssetChange[]) =>
+  saveToStorage(ASSET_CHANGES_KEY, changes);
+
+export const addAssetChange = (change: AssetChange) => {
+  const existingChanges = getAssetChanges();
+  const updatedChanges = [...existingChanges, change];
+  saveAssetChanges(updatedChanges);
+};
+
+export const markAssetChangesSynced = (changeIds: string[]) => {
+  const existingChanges = getAssetChanges();
+  const updatedChanges = existingChanges.map((change) =>
+    changeIds.includes(change.id) ? { ...change, synced: true } : change
+  );
+  saveAssetChanges(updatedChanges);
+};
+
+export const getPendingAssetChanges = (): AssetChange[] => {
+  return getAssetChanges().filter((change) => !change.synced);
 };
 
 // --- Initialization ---

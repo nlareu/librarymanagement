@@ -4,6 +4,7 @@
  */
 
 export * from "./Asset";
+export * from "./AssetChange";
 export * from "./Loan";
 export * from "./User";
 export * from "./UserChange";

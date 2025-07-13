@@ -17,6 +17,8 @@ const APPS_SCRIPT_URL =
 // In a real application, this would likely come from a configuration file.
 // const TEST_DATA_SPREADSHEET_ID = "1NpKpSSxHAg4HvKNhxeVJ2uhsoR68PGZml5xJLAmuU_0";
 const USER_DATA_SPREADSHEET_ID = "1wRM66xh6MLdhTMRW6QBkZjY3jmsW3IJ5_aTmEMFxyLQ";
+const ASSETS_DATA_SPREADSHEET_ID =
+  "1eJTMrPbreyzE8bBfzDMU3YDHRmyQTLghVQuXwr56RCg";
 
 /**
  * Base function to fetch and parse data from a Google Apps Script web app URL.
@@ -56,70 +58,6 @@ async function fetchSpreadsheetData(spreadsheetId: string): Promise<SheetData> {
 }
 
 /**
- * Base function to write a new row to a Google Apps Script web app.
- * @param spreadsheetId The ID of the Google Spreadsheet.
- * @param rowData The data for the new row.
- * @returns A promise that resolves to the success message from the script.
- * @throws An error if the submission fails.
- */
-async function writeToSpreadsheet(
-  spreadsheetId: string,
-  rowData: Record<string, string>
-): Promise<{ message: string }> {
-  const url = new URL(APPS_SCRIPT_URL);
-  url.searchParams.append("spreadsheetId", spreadsheetId);
-
-  const response = await fetch(url.toString(), {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(rowData),
-    mode: "cors",
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || `Request failed with status ${response.status}`
-    );
-  }
-
-  return result;
-}
-
-/**
- * Base function to clear and replace all data in a Google Apps Script web app.
- * @param spreadsheetId The ID of the Google Spreadsheet.
- * @param allData Array of row data to replace all existing data.
- * @returns A promise that resolves to the success message from the script.
- * @throws An error if the submission fails.
- */
-async function replaceAllSpreadsheetData(
-  spreadsheetId: string,
-  allData: Record<string, string>[]
-): Promise<{ message: string }> {
-  const url = new URL(APPS_SCRIPT_URL);
-  url.searchParams.append("spreadsheetId", spreadsheetId);
-
-  const response = await fetch(url.toString(), {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(allData),
-    mode: "cors",
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || `Request failed with status ${response.status}`
-    );
-  }
-
-  return result;
-}
-
-/**
  * Base function to sync user changes to a Google Apps Script web app.
  * @param spreadsheetId The ID of the Google Spreadsheet.
  * @param changes Array of user changes to sync.
@@ -156,6 +94,43 @@ async function syncUserChangesToSpreadsheet(
   return result;
 }
 
+/**
+ * Base function to sync asset changes to a Google Apps Script web app.
+ * @param spreadsheetId The ID of the Google Spreadsheet.
+ * @param changes Array of asset changes to sync.
+ * @returns A promise that resolves to the success message from the script.
+ * @throws An error if the submission fails.
+ */
+async function syncAssetChangesToSpreadsheet(
+  spreadsheetId: string,
+  changes: Array<{
+    changeType: "CREATE" | "UPDATE" | "DELETE";
+    assetId: string;
+    assetData?: Record<string, string>;
+  }>
+): Promise<{ message: string }> {
+  const url = new URL(APPS_SCRIPT_URL);
+  url.searchParams.append("spreadsheetId", spreadsheetId);
+  url.searchParams.append("action", "syncAssetChanges");
+
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(changes),
+    mode: "cors",
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.message || `Request failed with status ${response.status}`
+    );
+  }
+
+  return result;
+}
+
 // --- User Data Spreadsheet Specific Functions ---
 
 /**
@@ -163,26 +138,6 @@ async function syncUserChangesToSpreadsheet(
  */
 export async function fetchUserDataSpreadsheet(): Promise<SheetData> {
   return fetchSpreadsheetData(USER_DATA_SPREADSHEET_ID);
-}
-
-/**
- * Writes a new row specifically to the user data spreadsheet.
- * @param newRowData The data for the new row.
- */
-export async function writeToUserDataSpreadsheet(
-  newRowData: Record<string, string>
-): Promise<{ message: string }> {
-  return writeToSpreadsheet(USER_DATA_SPREADSHEET_ID, newRowData);
-}
-
-/**
- * Replaces all data specifically in the user data spreadsheet.
- * @param allUserData Array of user data to replace all existing data.
- */
-export async function replaceAllUserDataSpreadsheet(
-  allUserData: Record<string, string>[]
-): Promise<{ message: string }> {
-  return replaceAllSpreadsheetData(USER_DATA_SPREADSHEET_ID, allUserData);
 }
 
 /**
@@ -197,4 +152,27 @@ export async function syncUserChangesToUserDataSpreadsheet(
   }>
 ): Promise<{ message: string }> {
   return syncUserChangesToSpreadsheet(USER_DATA_SPREADSHEET_ID, changes);
+}
+
+// --- Assets Data Spreadsheet Specific Functions ---
+
+/**
+ * Fetches data specifically from the assets data spreadsheet.
+ */
+export async function fetchAssetsDataSpreadsheet(): Promise<SheetData> {
+  return fetchSpreadsheetData(ASSETS_DATA_SPREADSHEET_ID);
+}
+
+/**
+ * Syncs asset changes to the assets data spreadsheet.
+ * @param changes Array of asset changes to sync.
+ */
+export async function syncAssetChangesToAssetsDataSpreadsheet(
+  changes: Array<{
+    changeType: "CREATE" | "UPDATE" | "DELETE";
+    assetId: string;
+    assetData?: Record<string, string>;
+  }>
+): Promise<{ message: string }> {
+  return syncAssetChangesToSpreadsheet(ASSETS_DATA_SPREADSHEET_ID, changes);
 }
