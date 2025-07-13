@@ -5,7 +5,7 @@
 export const messages = {
   title: "Sincronización de Datos",
   description:
-    "Sincroniza los datos de usuarios y activos entre el almacenamiento local y Google Spreadsheets.",
+    "Sincroniza los datos de usuarios, activos y préstamos entre el almacenamiento local y Google Spreadsheets.",
 
   // User sync messages
   userSyncDownTitle: "Descargar Usuarios desde Spreadsheet",
@@ -28,6 +28,17 @@ export const messages = {
   assetSyncUpDescription:
     "Sube los cambios pendientes de activos locales a Google Spreadsheet.",
   assetSyncUpButton: "⬆️ Sincronizar Activos Hacia Arriba",
+
+  // Loan sync messages
+  loanSyncDownTitle: "Descargar Préstamos desde Spreadsheet",
+  loanSyncDownDescription:
+    "Descarga los datos de préstamos desde Google Spreadsheet y los guarda en el almacenamiento local.",
+  loanSyncDownButton: "⬇️ Sincronizar Préstamos Hacia Abajo",
+
+  loanSyncUpTitle: "Subir Préstamos al Spreadsheet",
+  loanSyncUpDescription:
+    "Sube los cambios pendientes de préstamos locales a Google Spreadsheet.",
+  loanSyncUpButton: "⬆️ Sincronizar Préstamos Hacia Arriba",
 
   syncing: "Sincronizando...",
 
@@ -61,6 +72,21 @@ export const messages = {
   noPendingAssetChanges:
     "ℹ️ No hay cambios pendientes de activos para sincronizar.",
 
+  // Loan sync status messages
+  syncingLoanDown:
+    "Descargando y reemplazando datos de préstamos desde Google Spreadsheet...",
+  syncingLoanUp:
+    "Subiendo cambios pendientes de préstamos a Google Spreadsheet...",
+  syncLoanDownComplete:
+    "✅ Sincronización de préstamos completada. {count} préstamos descargados y almacenados localmente. Historial de cambios limpiado.",
+  syncLoanUpComplete:
+    "✅ Sincronización de préstamos completada. {count} cambios subidos y aplicados en el spreadsheet. Historial de cambios limpiado.",
+  syncLoanDownError: "❌ Error al descargar datos de préstamos",
+  syncLoanUpError: "❌ Error al subir datos de préstamos",
+  noLoanDataFound: "ℹ️ No se encontraron datos de préstamos en el spreadsheet.",
+  noPendingLoanChanges:
+    "ℹ️ No hay cambios pendientes de préstamos para sincronizar.",
+
   // Clear changes messages
   clearUserChangesTitle: "Limpiar Historial de Cambios de Usuarios",
   clearUserChangesDescription:
@@ -72,10 +98,17 @@ export const messages = {
     "Elimina todos los cambios pendientes de activos del almacenamiento local.",
   clearAssetChangesButton: "🗑️ Limpiar Cambios de Activos",
 
+  clearLoanChangesTitle: "Limpiar Historial de Cambios de Préstamos",
+  clearLoanChangesDescription:
+    "Elimina todos los cambios pendientes de préstamos del almacenamiento local.",
+  clearLoanChangesButton: "🗑️ Limpiar Cambios de Préstamos",
+
   clearUserChangesComplete:
     "✅ Historial de cambios de usuarios limpiado exitosamente.",
   clearAssetChangesComplete:
     "✅ Historial de cambios de activos limpiado exitosamente.",
+  clearLoanChangesComplete:
+    "✅ Historial de cambios de préstamos limpiado exitosamente.",
 
   // Legacy messages (for backward compatibility)
   syncDownTitle: "Descargar desde Spreadsheet",

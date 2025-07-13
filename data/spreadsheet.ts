@@ -19,6 +19,8 @@ const APPS_SCRIPT_URL =
 const USER_DATA_SPREADSHEET_ID = "1wRM66xh6MLdhTMRW6QBkZjY3jmsW3IJ5_aTmEMFxyLQ";
 const ASSETS_DATA_SPREADSHEET_ID =
   "1eJTMrPbreyzE8bBfzDMU3YDHRmyQTLghVQuXwr56RCg";
+const LOANS_DATA_SPREADSHEET_ID =
+  "1dxZN6ZISDZsZruhorMNs1tGt1lPbenoS0U0Hu6BKJbQ"; // TODO: Replace with actual loan spreadsheet ID
 
 /**
  * Base function to fetch and parse data from a Google Apps Script web app URL.
@@ -131,6 +133,43 @@ async function syncAssetChangesToSpreadsheet(
   return result;
 }
 
+/**
+ * Base function to sync loan changes to a Google Apps Script web app.
+ * @param spreadsheetId The ID of the Google Spreadsheet.
+ * @param changes Array of loan changes to sync.
+ * @returns A promise that resolves to the success message from the script.
+ * @throws An error if the submission fails.
+ */
+async function syncLoanChangesToSpreadsheet(
+  spreadsheetId: string,
+  changes: Array<{
+    changeType: "CREATE" | "DELETE";
+    loanId: string;
+    loanData?: Record<string, string>;
+  }>
+): Promise<{ message: string }> {
+  const url = new URL(APPS_SCRIPT_URL);
+  url.searchParams.append("spreadsheetId", spreadsheetId);
+  url.searchParams.append("action", "syncLoanChanges");
+
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(changes),
+    mode: "cors",
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.message || `Request failed with status ${response.status}`
+    );
+  }
+
+  return result;
+}
+
 // --- User Data Spreadsheet Specific Functions ---
 
 /**
@@ -175,4 +214,27 @@ export async function syncAssetChangesToAssetsDataSpreadsheet(
   }>
 ): Promise<{ message: string }> {
   return syncAssetChangesToSpreadsheet(ASSETS_DATA_SPREADSHEET_ID, changes);
+}
+
+// --- Loans Data Spreadsheet Specific Functions ---
+
+/**
+ * Fetches data specifically from the loans data spreadsheet.
+ */
+export async function fetchLoansDataSpreadsheet(): Promise<SheetData> {
+  return fetchSpreadsheetData(LOANS_DATA_SPREADSHEET_ID);
+}
+
+/**
+ * Syncs loan changes to the loans data spreadsheet.
+ * @param changes Array of loan changes to sync.
+ */
+export async function syncLoanChangesToLoansDataSpreadsheet(
+  changes: Array<{
+    changeType: "CREATE" | "DELETE";
+    loanId: string;
+    loanData?: Record<string, string>;
+  }>
+): Promise<{ message: string }> {
+  return syncLoanChangesToSpreadsheet(LOANS_DATA_SPREADSHEET_ID, changes);
 }

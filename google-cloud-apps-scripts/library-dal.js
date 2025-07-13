@@ -98,6 +98,9 @@ function doPost(e) {
     } else if (action === "syncAssetChanges") {
       // Handle syncing asset changes
       result = handleSyncAssetChanges(sheet, data);
+    } else if (action === "syncLoanChanges") {
+      // Handle syncing loan changes
+      result = handleSyncLoanChanges(sheet, data);
     } else {
       // Default behavior: append a single row
       const headers = sheet.getDataRange().getValues()[0];
@@ -378,6 +381,71 @@ function deleteAssetRow(sheet, assetId) {
 
   for (let i = 1; i < values.length; i++) {
     if (values[i][assetIdColIndex] === assetId) {
+      // Delete this row
+      sheet.deleteRow(i + 1);
+      break;
+    }
+  }
+}
+
+/**
+ * Handles syncing loan changes to the spreadsheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {Array} changes Array of loan changes to apply.
+ * @returns {Object} Success response.
+ */
+function handleSyncLoanChanges(sheet, changes) {
+  for (const change of changes) {
+    switch (change.changeType) {
+      case "CREATE":
+        if (change.loanData) {
+          appendLoanRow(sheet, change.loanData);
+        }
+        break;
+      case "DELETE":
+        deleteLoanRow(sheet, change.loanId);
+        break;
+      default:
+        console.warn(`Unsupported loan change type: ${change.changeType}`);
+    }
+  }
+
+  return {
+    status: "success",
+    message: `Successfully processed ${changes.length} loan changes.`,
+  };
+}
+
+/**
+ * Appends a new loan row to the sheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {Object} loanData The loan data to append.
+ */
+function appendLoanRow(sheet, loanData) {
+  const headers = sheet.getDataRange().getValues()[0];
+  const newRow = [];
+  headers.forEach((header) => {
+    newRow.push(loanData[header] !== undefined ? loanData[header] : "");
+  });
+  sheet.appendRow(newRow);
+}
+
+/**
+ * Deletes a loan row from the sheet.
+ * @param {SpreadsheetApp.Sheet} sheet The sheet to modify.
+ * @param {string} loanId The ID of the loan to delete.
+ */
+function deleteLoanRow(sheet, loanId) {
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+  const headers = values[0];
+
+  // Find the row with the matching loan ID
+  const loanIdColIndex = headers.indexOf("id");
+  if (loanIdColIndex === -1) return; // No ID column found
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][loanIdColIndex] === loanId) {
       // Delete this row
       sheet.deleteRow(i + 1);
       break;

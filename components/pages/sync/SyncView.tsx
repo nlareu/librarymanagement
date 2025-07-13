@@ -8,18 +8,29 @@ import {
   syncUserChangesToUserDataSpreadsheet,
   fetchAssetsDataSpreadsheet,
   syncAssetChangesToAssetsDataSpreadsheet,
+  fetchLoansDataSpreadsheet,
+  syncLoanChangesToLoansDataSpreadsheet,
 } from "../../../data/spreadsheet";
-import { saveUsers, saveAssets } from "../../../data/db";
+import {
+  saveUsers,
+  saveAssets,
+  saveActiveLoans,
+  saveCompletedLoanHistory,
+} from "../../../data/db";
 import {
   getPendingUserChanges,
   markUserChangesSynced,
   getPendingAssetChanges,
   markAssetChangesSynced,
+  getPendingLoanChanges,
+  markLoanChangesSynced,
   clearUserChanges,
   clearAssetChanges,
+  clearLoanChanges,
 } from "../../../data/api";
 import type { User } from "../../../entities/User";
 import type { Asset } from "../../../entities/Asset";
+import type { ActiveLoan, LoanHistoryRecord } from "../../../entities/Loan";
 import "./SyncView.css";
 import { messages } from "./messages";
 
@@ -262,6 +273,133 @@ export function SyncView() {
     }
   };
 
+  const handleLoanSyncDown = async () => {
+    setIsSyncing(true);
+    setSyncStatus(messages.syncingLoanDown);
+    setErrorMessage("");
+
+    try {
+      const spreadsheetData = await fetchLoansDataSpreadsheet();
+
+      if (spreadsheetData.rows.length === 0) {
+        setSyncStatus(messages.noLoanDataFound);
+        return;
+      }
+
+      // Convert spreadsheet data to loan objects
+      // Note: We need to separate active loans from completed loans
+      const allLoans = spreadsheetData.rows.map((row) => ({
+        id: row.id || crypto.randomUUID(),
+        assetId: row.assetId || "",
+        assetTitle: row.assetTitle || "",
+        userId: row.userId || "",
+        userName: row.userName || "",
+        borrowDate: row.borrowDate || "",
+        returnDate: row.returnDate || undefined,
+      }));
+
+      // Separate active loans from completed loans
+      const activeLoans: ActiveLoan[] = allLoans
+        .filter((loan) => !loan.returnDate)
+        .map((loan) => ({
+          id: loan.id,
+          assetId: loan.assetId,
+          assetTitle: loan.assetTitle,
+          userId: loan.userId,
+          userName: loan.userName,
+          borrowDate: loan.borrowDate,
+        }));
+
+      const completedLoans: LoanHistoryRecord[] = allLoans
+        .filter((loan) => loan.returnDate)
+        .map((loan) => ({
+          id: loan.id,
+          assetId: loan.assetId,
+          assetTitle: loan.assetTitle,
+          userId: loan.userId,
+          userName: loan.userName,
+          borrowDate: loan.borrowDate,
+          returnDate: loan.returnDate!,
+        }));
+
+      // Save to local storage
+      saveActiveLoans(activeLoans);
+      saveCompletedLoanHistory(completedLoans);
+
+      // Clear loan change history since we're now in sync
+      clearLoanChanges();
+
+      setSyncStatus(
+        messages.syncLoanDownComplete.replace(
+          "{count}",
+          allLoans.length.toString()
+        )
+      );
+    } catch (error) {
+      console.error("Error syncing loans down:", error);
+      setErrorMessage(
+        messages.syncLoanDownError + ": " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleLoanSyncUp = async () => {
+    setIsSyncing(true);
+    setSyncStatus(messages.syncingLoanUp);
+    setErrorMessage("");
+
+    try {
+      const pendingChanges = getPendingLoanChanges();
+
+      if (pendingChanges.length === 0) {
+        setSyncStatus(messages.noPendingLoanChanges);
+        return;
+      }
+
+      // Convert changes to spreadsheet format
+      const changesToSync = pendingChanges.map((change) => ({
+        changeType: change.changeType,
+        loanId: change.loanId,
+        loanData: change.newData
+          ? {
+              id: change.loanId,
+              assetId: change.newData.assetId || "",
+              assetTitle: change.newData.assetTitle || "",
+              userId: change.newData.userId || "",
+              userName: change.newData.userName || "",
+              borrowDate: change.newData.borrowDate || "",
+            }
+          : undefined,
+      }));
+
+      await syncLoanChangesToLoansDataSpreadsheet(changesToSync);
+
+      // Mark changes as synced
+      const changeIds = pendingChanges.map((change) => change.id);
+      markLoanChangesSynced(changeIds);
+
+      setSyncStatus(
+        messages.syncLoanUpComplete.replace(
+          "{count}",
+          pendingChanges.length.toString()
+        )
+      );
+    } catch (error) {
+      console.error("Error syncing loans up:", error);
+      setErrorMessage(
+        messages.syncLoanUpError + ": " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      // Clear loan change history after sync attempt (successful or not)
+      clearLoanChanges();
+      setIsSyncing(false);
+    }
+  };
+
   const handleClearUserChanges = async () => {
     setIsSyncing(true);
     setSyncStatus("Limpiando historial de cambios de usuarios...");
@@ -293,6 +431,25 @@ export function SyncView() {
       console.error("Error clearing asset changes:", error);
       setErrorMessage(
         "❌ Error al limpiar cambios de activos: " + (error as Error).message
+      );
+      setSyncStatus("");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleClearLoanChanges = async () => {
+    setIsSyncing(true);
+    setSyncStatus("Limpiando historial de cambios de préstamos...");
+    setErrorMessage("");
+
+    try {
+      clearLoanChanges();
+      setSyncStatus(messages.clearLoanChangesComplete);
+    } catch (error) {
+      console.error("Error clearing loan changes:", error);
+      setErrorMessage(
+        "❌ Error al limpiar cambios de préstamos: " + (error as Error).message
       );
       setSyncStatus("");
     } finally {
@@ -365,6 +522,34 @@ export function SyncView() {
         </div>
 
         <div className="sync-section">
+          <h3>{messages.loanSyncDownTitle}</h3>
+          <p>{messages.loanSyncDownDescription}</p>
+          <button
+            className="sync-button sync-down"
+            onClick={handleLoanSyncDown}
+            disabled={isSyncing}
+          >
+            {isSyncing && syncStatus === messages.syncingLoanDown
+              ? messages.syncing
+              : messages.loanSyncDownButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.loanSyncUpTitle}</h3>
+          <p>{messages.loanSyncUpDescription}</p>
+          <button
+            className="sync-button sync-up"
+            onClick={handleLoanSyncUp}
+            disabled={isSyncing}
+          >
+            {isSyncing && syncStatus === messages.syncingLoanUp
+              ? messages.syncing
+              : messages.loanSyncUpButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
           <h3>{messages.clearUserChangesTitle}</h3>
           <p>{messages.clearUserChangesDescription}</p>
           <button
@@ -385,6 +570,18 @@ export function SyncView() {
             disabled={isSyncing}
           >
             {messages.clearAssetChangesButton}
+          </button>
+        </div>
+
+        <div className="sync-section">
+          <h3>{messages.clearLoanChangesTitle}</h3>
+          <p>{messages.clearLoanChangesDescription}</p>
+          <button
+            className="sync-button clear-changes"
+            onClick={handleClearLoanChanges}
+            disabled={isSyncing}
+          >
+            {messages.clearLoanChangesButton}
           </button>
         </div>
       </div>

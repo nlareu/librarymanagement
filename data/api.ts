@@ -11,6 +11,7 @@ import type {
   LoanHistoryRecord,
   UserChange,
   AssetChange,
+  LoanChange,
 } from "../entities/index";
 import type { AssetFormData } from "../components/shared/AssetForm/types";
 import type { UserFormData } from "../components/shared/UserForm/types";
@@ -401,6 +402,24 @@ export function borrowAsset(assetId: string, userId: string): ActiveLoan[] {
     borrowDate: new Date().toISOString(),
   };
 
+  // Track the loan creation change
+  const loanChange: LoanChange = {
+    id: crypto.randomUUID(),
+    changeType: "CREATE",
+    loanId: newLoan.id,
+    timestamp: new Date().toISOString(),
+    newData: {
+      assetId: newLoan.assetId,
+      assetTitle: newLoan.assetTitle,
+      userId: newLoan.userId,
+      userName: newLoan.userName,
+      borrowDate: newLoan.borrowDate,
+    },
+    synced: false,
+  };
+
+  db.addLoanChange(loanChange);
+
   const currentLoans = db.getActiveLoans();
   const updatedLoans = [...currentLoans, newLoan];
   db.saveActiveLoans(updatedLoans);
@@ -420,6 +439,24 @@ export function returnLoan(loanId: string, returnDate: string) {
     ...loanToReturn,
     returnDate: returnDate,
   };
+
+  // Track the loan return change as DELETE (since the active loan is being removed)
+  const loanChange: LoanChange = {
+    id: crypto.randomUUID(),
+    changeType: "DELETE",
+    loanId: loanToReturn.id,
+    timestamp: new Date().toISOString(),
+    oldData: {
+      assetId: loanToReturn.assetId,
+      assetTitle: loanToReturn.assetTitle,
+      userId: loanToReturn.userId,
+      userName: loanToReturn.userName,
+      borrowDate: loanToReturn.borrowDate,
+    },
+    synced: false,
+  };
+
+  db.addLoanChange(loanChange);
 
   const history = db.getCompletedLoanHistory();
   const updatedHistory = [...history, newHistoryRecord];
@@ -451,4 +488,22 @@ export function clearUserChanges(): void {
 
 export function clearAssetChanges(): void {
   db.saveAssetChanges([]);
+}
+
+// --- Loan Change Operations ---
+
+export function getPendingLoanChanges(): LoanChange[] {
+  return db.getPendingLoanChanges();
+}
+
+export function markLoanChangesSynced(changeIds: string[]): void {
+  db.markLoanChangesSynced(changeIds);
+}
+
+export function getAllLoanChanges(): LoanChange[] {
+  return db.getLoanChanges();
+}
+
+export function clearLoanChanges(): void {
+  db.saveLoanChanges([]);
 }

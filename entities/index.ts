@@ -6,5 +6,6 @@
 export * from "./Asset";
 export * from "./AssetChange";
 export * from "./Loan";
+export * from "./LoanChange";
 export * from "./User";
 export * from "./UserChange";
