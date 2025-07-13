@@ -44,35 +44,3 @@
   gap: 0.5rem;
   align-items: center;
 }
-
-.user-actions .btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  border: 1px solid;
-}
-
-.user-actions .btn-secondary {
-  background: var(--secondary-color);
-  border-color: var(--border-color);
-  color: var(--text-color);
-}
-
-.user-actions .btn-secondary:hover {
-  background: #e9ecef;
-}
-
-.user-actions .btn-danger {
-  background: #dc3545;
-  border-color: #dc3545;
-  color: white;
-}
-
-.user-actions .btn-danger:hover {
-  background: #c82333;
-  border-color: #bd2130;
-}

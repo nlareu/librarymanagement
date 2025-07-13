@@ -47,7 +47,7 @@ export function UserCard({ user, onClick, onEdit, onDelete }: UserCardProps) {
               onClick={handleEdit}
               title="Editar usuario"
             >
-              ✏️
+              Editar
             </button>
           )}
           {onDelete && (
@@ -56,7 +56,7 @@ export function UserCard({ user, onClick, onEdit, onDelete }: UserCardProps) {
               onClick={handleDelete}
               title="Eliminar usuario"
             >
-              🗑️
+              Eliminar
             </button>
           )}
         </div>
