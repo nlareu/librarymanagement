@@ -39,7 +39,7 @@ export const messages = {
   syncUserDownComplete:
     "✅ Sincronización de usuarios completada. {count} usuarios descargados y almacenados localmente. Historial de cambios limpiado.",
   syncUserUpComplete:
-    "✅ Sincronización de usuarios completada. {count} cambios subidos y aplicados en el spreadsheet.",
+    "✅ Sincronización de usuarios completada. {count} cambios subidos y aplicados en el spreadsheet. Historial de cambios limpiado.",
   syncUserDownError: "❌ Error al descargar datos de usuarios",
   syncUserUpError: "❌ Error al subir datos de usuarios",
   noUserDataFound: "ℹ️ No se encontraron datos de usuarios en el spreadsheet.",
@@ -54,7 +54,7 @@ export const messages = {
   syncAssetDownComplete:
     "✅ Sincronización de activos completada. {count} activos descargados y almacenados localmente. Historial de cambios limpiado.",
   syncAssetUpComplete:
-    "✅ Sincronización de activos completada. {count} cambios subidos y aplicados en el spreadsheet.",
+    "✅ Sincronización de activos completada. {count} cambios subidos y aplicados en el spreadsheet. Historial de cambios limpiado.",
   syncAssetDownError: "❌ Error al descargar datos de activos",
   syncAssetUpError: "❌ Error al subir datos de activos",
   noAssetDataFound: "ℹ️ No se encontraron datos de activos en el spreadsheet.",

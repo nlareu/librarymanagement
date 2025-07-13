@@ -122,6 +122,8 @@ export function SyncView() {
       );
       setSyncStatus("");
     } finally {
+      // Clear user change history after sync attempt (successful or not)
+      clearUserChanges();
       setIsSyncing(false);
     }
   };
@@ -254,6 +256,8 @@ export function SyncView() {
       );
       setSyncStatus("");
     } finally {
+      // Clear asset change history after sync attempt (successful or not)
+      clearAssetChanges();
       setIsSyncing(false);
     }
   };
