@@ -53,6 +53,10 @@ export function SyncView() {
 
       // Save to local storage
       saveUsers(users);
+
+      // Clear user change history since we're now in sync
+      clearUserChanges();
+
       setSyncStatus(
         messages.syncUserDownComplete.replace(
           "{count}",
@@ -164,6 +168,10 @@ export function SyncView() {
 
       // Save to local storage
       saveAssets(assets);
+
+      // Clear asset change history since we're now in sync
+      clearAssetChanges();
+
       setSyncStatus(
         messages.syncAssetDownComplete.replace(
           "{count}",

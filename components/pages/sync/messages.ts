@@ -37,7 +37,7 @@ export const messages = {
   syncingUserUp:
     "Subiendo cambios pendientes de usuarios a Google Spreadsheet...",
   syncUserDownComplete:
-    "✅ Sincronización de usuarios completada. {count} usuarios descargados y almacenados localmente.",
+    "✅ Sincronización de usuarios completada. {count} usuarios descargados y almacenados localmente. Historial de cambios limpiado.",
   syncUserUpComplete:
     "✅ Sincronización de usuarios completada. {count} cambios subidos y aplicados en el spreadsheet.",
   syncUserDownError: "❌ Error al descargar datos de usuarios",
@@ -52,7 +52,7 @@ export const messages = {
   syncingAssetUp:
     "Subiendo cambios pendientes de activos a Google Spreadsheet...",
   syncAssetDownComplete:
-    "✅ Sincronización de activos completada. {count} activos descargados y almacenados localmente.",
+    "✅ Sincronización de activos completada. {count} activos descargados y almacenados localmente. Historial de cambios limpiado.",
   syncAssetUpComplete:
     "✅ Sincronización de activos completada. {count} cambios subidos y aplicados en el spreadsheet.",
   syncAssetDownError: "❌ Error al descargar datos de activos",
