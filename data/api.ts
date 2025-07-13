@@ -9,6 +9,7 @@ import type {
   User,
   ActiveLoan,
   LoanHistoryRecord,
+  UserChange,
 } from "../entities/index";
 import type { AssetFormData } from "../components/shared/AssetForm/types";
 import type { UserFormData } from "../components/shared/UserForm/types";
@@ -135,9 +136,119 @@ export async function addUser(userData: UserFormData): Promise<User[]> {
     userCode,
   };
 
+  // Track the change
+  const userChange: UserChange = {
+    id: crypto.randomUUID(),
+    changeType: "CREATE",
+    userId: newUser.id,
+    timestamp: new Date().toISOString(),
+    newData: {
+      userCode: newUser.userCode,
+      name: newUser.name,
+      lastName: newUser.lastName,
+      type: newUser.type,
+      grade: newUser.grade,
+    },
+    synced: false,
+  };
+
+  db.addUserChange(userChange);
+
   const updatedUsers = [...users, newUser];
   db.saveUsers(updatedUsers);
   return updatedUsers;
+}
+
+export async function updateUser(
+  userId: string,
+  userData: UserFormData
+): Promise<User[]> {
+  const users = db.getUsers();
+  const userIndex = users.findIndex((user) => user.id === userId);
+
+  if (userIndex === -1) {
+    throw new Error(`User with id ${userId} not found`);
+  }
+
+  const oldUser = users[userIndex];
+  const updatedUser = { ...oldUser, ...userData };
+
+  // Track the change
+  const userChange: UserChange = {
+    id: crypto.randomUUID(),
+    changeType: "UPDATE",
+    userId: userId,
+    timestamp: new Date().toISOString(),
+    oldData: {
+      userCode: oldUser.userCode,
+      name: oldUser.name,
+      lastName: oldUser.lastName,
+      type: oldUser.type,
+      grade: oldUser.grade,
+    },
+    newData: {
+      userCode: updatedUser.userCode,
+      name: updatedUser.name,
+      lastName: updatedUser.lastName,
+      type: updatedUser.type,
+      grade: updatedUser.grade,
+    },
+    synced: false,
+  };
+
+  db.addUserChange(userChange);
+
+  const updatedUsers = [...users];
+  updatedUsers[userIndex] = updatedUser;
+  db.saveUsers(updatedUsers);
+
+  return updatedUsers;
+}
+
+export async function deleteUser(userId: string): Promise<User[]> {
+  const users = db.getUsers();
+  const userToDelete = users.find((user) => user.id === userId);
+
+  if (!userToDelete) {
+    throw new Error(`User with id ${userId} not found`);
+  }
+
+  // Track the change
+  const userChange: UserChange = {
+    id: crypto.randomUUID(),
+    changeType: "DELETE",
+    userId: userId,
+    timestamp: new Date().toISOString(),
+    oldData: {
+      userCode: userToDelete.userCode,
+      name: userToDelete.name,
+      lastName: userToDelete.lastName,
+      type: userToDelete.type,
+      grade: userToDelete.grade,
+    },
+    synced: false,
+  };
+
+  db.addUserChange(userChange);
+
+  const updatedUsers = users.filter((user) => user.id !== userId);
+  db.saveUsers(updatedUsers);
+
+  return updatedUsers;
+}
+
+// --- User Change Operations ---
+
+export function getPendingUserChanges(): UserChange[] {
+  return db.getPendingUserChanges();
+}
+
+export function markUserChangesSynced(changeIds: string[]): void {
+  db.markUserChangesSynced(changeIds);
+}
+
+export function getAllUserChanges(): UserChange[] {
+  return db.getUserChanges();
 }
 
 // --- Loan Operations ---

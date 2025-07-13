@@ -14,7 +14,8 @@
   border-bottom: 1px solid var(--border-color);
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .user-card:hover {
@@ -24,16 +25,54 @@
 }
 
 .user-info {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .user-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
 }
 
 .user-details {
-    font-size: 1rem;
-    color: #4b5563;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.user-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  border: 1px solid;
+}
+
+.user-actions .btn-secondary {
+  background: var(--secondary-color);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.user-actions .btn-secondary:hover {
+  background: #e9ecef;
+}
+
+.user-actions .btn-danger {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.user-actions .btn-danger:hover {
+  background: #c82333;
+  border-color: #bd2130;
 }

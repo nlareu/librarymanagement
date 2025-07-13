@@ -13,12 +13,16 @@ interface UserListViewProps {
   users: User[];
   onSelectUser: (user: User) => void;
   onAddUserClick: () => void;
+  onEditUser?: (user: User) => void;
+  onDeleteUser?: (user: User) => void;
 }
 
 export function UserListView({
   users,
   onSelectUser,
   onAddUserClick,
+  onEditUser,
+  onDeleteUser,
 }: UserListViewProps) {
   const [searchText, setSearchText] = useState("");
   const [typeFilters, setTypeFilters] = useState<UserType[]>([]);
@@ -83,7 +87,13 @@ export function UserListView({
       ) : (
         <div className="user-list">
           {filteredUsers.map((user) => (
-            <UserCard key={user.id} user={user} onClick={onSelectUser} />
+            <UserCard
+              key={user.id}
+              user={user}
+              onClick={onSelectUser}
+              onEdit={onEditUser}
+              onDelete={onDeleteUser}
+            />
           ))}
         </div>
       )}

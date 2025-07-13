@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 export const messages = {
-    "collection": "Catalogo",
-    "users": "Usuarios",
-    "history": "Prestamos"
+  collection: "Catalogo",
+  users: "Usuarios",
+  history: "Prestamos",
+  sync: "Sincronización",
 };

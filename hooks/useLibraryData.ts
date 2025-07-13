@@ -133,6 +133,27 @@ export function useLibraryData() {
     setSelectedUserDetail(user);
   }, []);
 
+  const handleUpdateUser = useCallback(
+    async (userId: string, userData: UserFormData) => {
+      try {
+        const updatedUsers = await api.updateUser(userId, userData);
+        setUsers(updatedUsers);
+      } catch (err) {
+        console.error("Failed to update user:", err);
+      }
+    },
+    []
+  );
+
+  const handleDeleteUser = useCallback(async (userId: string) => {
+    try {
+      const updatedUsers = await api.deleteUser(userId);
+      setUsers(updatedUsers);
+    } catch (err) {
+      console.error("Failed to delete user:", err);
+    }
+  }, []);
+
   return {
     // Data
     assets,
@@ -160,6 +181,8 @@ export function useLibraryData() {
     // Data mutation handlers
     handleAddAsset,
     handleAddUser,
+    handleUpdateUser,
+    handleDeleteUser,
     handleUpdateAsset,
     handleDeleteAsset,
     handleBorrowAsset,
