@@ -465,124 +465,146 @@ export function SyncView() {
       </div>
 
       <div className="sync-actions">
-        <div className="sync-section">
-          <h3>{messages.userSyncDownTitle}</h3>
-          <p>{messages.userSyncDownDescription}</p>
-          <button
-            className="sync-button sync-down"
-            onClick={handleUserSyncDown}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingUserDown
-              ? messages.syncing
-              : messages.userSyncDownButton}
-          </button>
+        {/* User Operations Group */}
+        <div className="sync-group">
+          <div className="sync-group-header">
+            <h3>👥 Gestión de Usuarios</h3>
+            <p>Sincronizar y gestionar datos de usuarios</p>
+          </div>
+          <div className="sync-group-buttons">
+            <div className="sync-section">
+              <h4>{messages.userSyncDownTitle}</h4>
+              <p>{messages.userSyncDownDescription}</p>
+              <button
+                className="sync-button sync-down"
+                onClick={handleUserSyncDown}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingUserDown
+                  ? messages.syncing
+                  : messages.userSyncDownButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.userSyncUpTitle}</h4>
+              <p>{messages.userSyncUpDescription}</p>
+              <button
+                className="sync-button sync-up"
+                onClick={handleUserSyncUp}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingUserUp
+                  ? messages.syncing
+                  : messages.userSyncUpButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.clearUserChangesTitle}</h4>
+              <p>{messages.clearUserChangesDescription}</p>
+              <button
+                className="sync-button clear-changes"
+                onClick={handleClearUserChanges}
+                disabled={isSyncing}
+              >
+                {messages.clearUserChangesButton}
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="sync-section">
-          <h3>{messages.userSyncUpTitle}</h3>
-          <p>{messages.userSyncUpDescription}</p>
-          <button
-            className="sync-button sync-up"
-            onClick={handleUserSyncUp}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingUserUp
-              ? messages.syncing
-              : messages.userSyncUpButton}
-          </button>
+        {/* Asset Operations Group */}
+        <div className="sync-group">
+          <div className="sync-group-header">
+            <h3>📚 Gestión de Activos</h3>
+          </div>
+          <div className="sync-group-buttons">
+            <div className="sync-section">
+              <h4>{messages.assetSyncDownTitle}</h4>
+              <p>{messages.assetSyncDownDescription}</p>
+              <button
+                className="sync-button sync-down"
+                onClick={handleAssetSyncDown}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingAssetDown
+                  ? messages.syncing
+                  : messages.assetSyncDownButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.assetSyncUpTitle}</h4>
+              <p>{messages.assetSyncUpDescription}</p>
+              <button
+                className="sync-button sync-up"
+                onClick={handleAssetSyncUp}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingAssetUp
+                  ? messages.syncing
+                  : messages.assetSyncUpButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.clearAssetChangesTitle}</h4>
+              <p>{messages.clearAssetChangesDescription}</p>
+              <button
+                className="sync-button clear-changes"
+                onClick={handleClearAssetChanges}
+                disabled={isSyncing}
+              >
+                {messages.clearAssetChangesButton}
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="sync-section">
-          <h3>{messages.assetSyncDownTitle}</h3>
-          <p>{messages.assetSyncDownDescription}</p>
-          <button
-            className="sync-button sync-down"
-            onClick={handleAssetSyncDown}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingAssetDown
-              ? messages.syncing
-              : messages.assetSyncDownButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.assetSyncUpTitle}</h3>
-          <p>{messages.assetSyncUpDescription}</p>
-          <button
-            className="sync-button sync-up"
-            onClick={handleAssetSyncUp}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingAssetUp
-              ? messages.syncing
-              : messages.assetSyncUpButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.loanSyncDownTitle}</h3>
-          <p>{messages.loanSyncDownDescription}</p>
-          <button
-            className="sync-button sync-down"
-            onClick={handleLoanSyncDown}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingLoanDown
-              ? messages.syncing
-              : messages.loanSyncDownButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.loanSyncUpTitle}</h3>
-          <p>{messages.loanSyncUpDescription}</p>
-          <button
-            className="sync-button sync-up"
-            onClick={handleLoanSyncUp}
-            disabled={isSyncing}
-          >
-            {isSyncing && syncStatus === messages.syncingLoanUp
-              ? messages.syncing
-              : messages.loanSyncUpButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.clearUserChangesTitle}</h3>
-          <p>{messages.clearUserChangesDescription}</p>
-          <button
-            className="sync-button clear-changes"
-            onClick={handleClearUserChanges}
-            disabled={isSyncing}
-          >
-            {messages.clearUserChangesButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.clearAssetChangesTitle}</h3>
-          <p>{messages.clearAssetChangesDescription}</p>
-          <button
-            className="sync-button clear-changes"
-            onClick={handleClearAssetChanges}
-            disabled={isSyncing}
-          >
-            {messages.clearAssetChangesButton}
-          </button>
-        </div>
-
-        <div className="sync-section">
-          <h3>{messages.clearLoanChangesTitle}</h3>
-          <p>{messages.clearLoanChangesDescription}</p>
-          <button
-            className="sync-button clear-changes"
-            onClick={handleClearLoanChanges}
-            disabled={isSyncing}
-          >
-            {messages.clearLoanChangesButton}
-          </button>
+        {/* Loan Operations Group */}
+        <div className="sync-group">
+          <div className="sync-group-header">
+            <h3>� Gestión de Préstamos</h3>
+            <p>
+              Sincronizar y gestionar datos de préstamos activos e historial
+            </p>
+          </div>
+          <div className="sync-group-buttons">
+            <div className="sync-section">
+              <h4>{messages.loanSyncDownTitle}</h4>
+              <p>{messages.loanSyncDownDescription}</p>
+              <button
+                className="sync-button sync-down"
+                onClick={handleLoanSyncDown}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingLoanDown
+                  ? messages.syncing
+                  : messages.loanSyncDownButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.loanSyncUpTitle}</h4>
+              <p>{messages.loanSyncUpDescription}</p>
+              <button
+                className="sync-button sync-up"
+                onClick={handleLoanSyncUp}
+                disabled={isSyncing}
+              >
+                {isSyncing && syncStatus === messages.syncingLoanUp
+                  ? messages.syncing
+                  : messages.loanSyncUpButton}
+              </button>
+            </div>
+            <div className="sync-section">
+              <h4>{messages.clearLoanChangesTitle}</h4>
+              <p>{messages.clearLoanChangesDescription}</p>
+              <button
+                className="sync-button clear-changes"
+                onClick={handleClearLoanChanges}
+                disabled={isSyncing}
+              >
+                {messages.clearLoanChangesButton}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
