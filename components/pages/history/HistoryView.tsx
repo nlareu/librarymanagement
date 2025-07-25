@@ -13,6 +13,7 @@ import { messages } from "./messages";
 interface HistoryViewProps {
   activeLoans: ActiveLoan[];
   completedLoans: LoanHistoryRecord[];
+  historicalReport: (ActiveLoan | LoanHistoryRecord)[];
   onReturn: (loan: ActiveLoan) => void;
   assetFilter: string;
   onAssetFilterChange: (value: string) => void;
@@ -22,18 +23,21 @@ interface HistoryViewProps {
   onDateStartFilterChange: (value: string) => void;
   dateEndFilter: string;
   onDateEndFilterChange: (value: string) => void;
+  returnStatusFilter: "all" | "returned" | "active";
+  onReturnStatusFilterChange: (value: "all" | "returned" | "active") => void;
   onClearFilters: () => void;
 }
 
-type HistoryTab = "active" | "completed";
+type HistoryTab = "active" | "historical";
 
 export function HistoryView(props: HistoryViewProps) {
-  const { activeLoans, completedLoans, onReturn, ...filterProps } = props;
+  const { activeLoans, historicalReport, onReturn, ...filterProps } = props;
   const [activeTab, setActiveTab] = useState<HistoryTab>("active");
 
   return (
     <div className="history-container view-container">
       <h2>{messages.title}</h2>
+      <HistoryFilters {...filterProps} />
       <div className="history-tabs">
         <button
           className={`history-tab-btn ${
@@ -45,11 +49,11 @@ export function HistoryView(props: HistoryViewProps) {
         </button>
         <button
           className={`history-tab-btn ${
-            activeTab === "completed" ? "active" : ""
+            activeTab === "historical" ? "active" : ""
           }`}
-          onClick={() => setActiveTab("completed")}
+          onClick={() => setActiveTab("historical")}
         >
-          {messages.completedLoansTab}
+          {messages.historicalReportTab} ({historicalReport.length})
         </button>
       </div>
 
@@ -69,18 +73,30 @@ export function HistoryView(props: HistoryViewProps) {
         </div>
       )}
 
-      {activeTab === "completed" && (
+      {activeTab === "historical" && (
         <div className="loan-list-container">
-          <HistoryFilters {...filterProps} />
-          {completedLoans.length === 0 ? (
+          {historicalReport.length === 0 ? (
             <div className="empty-state">
-              <p>{messages.emptyState}</p>
+              <p>{messages.emptyHistoricalReport}</p>
             </div>
           ) : (
             <div className="loan-history-list">
-              {completedLoans.map((loan) => (
-                <LoanHistoryCard key={loan.id} loan={loan} />
-              ))}
+              {historicalReport.map((loan) => {
+                // Check if it's an active loan (no returnDate) or completed loan
+                if ("returnDate" in loan) {
+                  // It's a completed loan
+                  return <LoanHistoryCard key={loan.id} loan={loan} />;
+                } else {
+                  // It's an active loan
+                  return (
+                    <ActiveLoanCard
+                      key={loan.id}
+                      loan={loan}
+                      onReturn={onReturn}
+                    />
+                  );
+                }
+              })}
             </div>
           )}
         </div>

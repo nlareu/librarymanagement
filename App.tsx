@@ -66,8 +66,12 @@ export function App() {
   const { filteredAssets, availableAssetTypes, ...collectionFilterProps } =
     useCollectionFilters(assets);
 
-  const { filteredLoanHistory, ...historyFilterProps } =
-    useHistoryFilters(completedLoanHistory);
+  const {
+    filteredActiveLoans,
+    filteredLoanHistory,
+    filteredHistoricalReport,
+    ...historyFilterProps
+  } = useHistoryFilters(completedLoanHistory, activeLoans);
 
   if (isLoading) {
     return (
@@ -111,8 +115,9 @@ export function App() {
         )}
         {view === "history" && (
           <HistoryView
-            activeLoans={activeLoans}
+            activeLoans={filteredActiveLoans}
             completedLoans={filteredLoanHistory}
+            historicalReport={filteredHistoricalReport}
             onReturn={handleReturnLoan}
             {...historyFilterProps}
           />
