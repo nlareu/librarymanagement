@@ -31,24 +31,26 @@ import {
 import type { User } from "../../../entities/User";
 import type { Asset } from "../../../entities/Asset";
 import type { ActiveLoan, LoanHistoryRecord } from "../../../entities/Loan";
+import { useToast } from "../../../hooks/useToast";
+import { ToastContainer } from "../../shared/Toast/ToastContainer";
 import "./SyncView.css";
 import { messages } from "./messages";
 
 export function SyncView() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { toasts, removeToast, showSuccess, showError, showInfo } = useToast();
 
   const handleUserSyncDown = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingUserDown);
-    setErrorMessage("");
 
     try {
       const spreadsheetData = await fetchUserDataSpreadsheet();
 
       if (spreadsheetData.rows.length === 0) {
-        setSyncStatus(messages.noUserDataFound);
+        showInfo(messages.noUserDataFound);
+        setSyncStatus("");
         return;
       }
 
@@ -68,7 +70,7 @@ export function SyncView() {
       // Clear user change history since we're now in sync
       clearUserChanges();
 
-      setSyncStatus(
+      showSuccess(
         messages.syncUserDownComplete.replace(
           "{count}",
           users.length.toString()
@@ -76,11 +78,9 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing users down:", error);
-      setErrorMessage(
-        messages.syncUserDownError + ": " + (error as Error).message
-      );
-      setSyncStatus("");
+      showError(messages.syncUserDownError + ": " + (error as Error).message);
     } finally {
+      setSyncStatus("");
       setIsSyncing(false);
     }
   };
@@ -88,13 +88,13 @@ export function SyncView() {
   const handleUserSyncUp = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingUserUp);
-    setErrorMessage("");
 
     try {
       const pendingChanges = getPendingUserChanges();
 
       if (pendingChanges.length === 0) {
-        setSyncStatus(messages.noPendingUserChanges);
+        showInfo(messages.noPendingUserChanges);
+        setSyncStatus("");
         return;
       }
 
@@ -120,7 +120,7 @@ export function SyncView() {
       const changeIds = pendingChanges.map((change) => change.id);
       markUserChangesSynced(changeIds);
 
-      setSyncStatus(
+      showSuccess(
         messages.syncUserUpComplete.replace(
           "{count}",
           pendingChanges.length.toString()
@@ -128,13 +128,11 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing users up:", error);
-      setErrorMessage(
-        messages.syncUserUpError + ": " + (error as Error).message
-      );
-      setSyncStatus("");
+      showError(messages.syncUserUpError + ": " + (error as Error).message);
     } finally {
       // Clear user change history after sync attempt (successful or not)
       clearUserChanges();
+      setSyncStatus("");
       setIsSyncing(false);
     }
   };
@@ -142,13 +140,13 @@ export function SyncView() {
   const handleAssetSyncDown = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingAssetDown);
-    setErrorMessage("");
 
     try {
       const spreadsheetData = await fetchAssetsDataSpreadsheet();
 
       if (spreadsheetData.rows.length === 0) {
-        setSyncStatus(messages.noAssetDataFound);
+        showInfo(messages.noAssetDataFound);
+        setSyncStatus("");
         return;
       }
 
@@ -185,7 +183,7 @@ export function SyncView() {
       // Clear asset change history since we're now in sync
       clearAssetChanges();
 
-      setSyncStatus(
+      showSuccess(
         messages.syncAssetDownComplete.replace(
           "{count}",
           assets.length.toString()
@@ -193,11 +191,9 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing assets down:", error);
-      setErrorMessage(
-        messages.syncAssetDownError + ": " + (error as Error).message
-      );
-      setSyncStatus("");
+      showError(messages.syncAssetDownError + ": " + (error as Error).message);
     } finally {
+      setSyncStatus("");
       setIsSyncing(false);
     }
   };
@@ -205,13 +201,14 @@ export function SyncView() {
   const handleAssetSyncUp = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingAssetUp);
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       const pendingChanges = getPendingAssetChanges();
 
       if (pendingChanges.length === 0) {
-        setSyncStatus(messages.noPendingAssetChanges);
+        showInfo(messages.noPendingAssetChanges);
+        setSyncStatus("");
         return;
       }
 
@@ -262,9 +259,7 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing assets up:", error);
-      setErrorMessage(
-        messages.syncAssetUpError + ": " + (error as Error).message
-      );
+      showError(messages.syncAssetUpError + ": " + (error as Error).message);
       setSyncStatus("");
     } finally {
       // Clear asset change history after sync attempt (successful or not)
@@ -276,13 +271,14 @@ export function SyncView() {
   const handleLoanSyncDown = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingLoanDown);
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       const spreadsheetData = await fetchLoansDataSpreadsheet();
 
       if (spreadsheetData.rows.length === 0) {
-        setSyncStatus(messages.noLoanDataFound);
+        showInfo(messages.noLoanDataFound);
+        setSyncStatus("");
         return;
       }
 
@@ -337,9 +333,7 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing loans down:", error);
-      setErrorMessage(
-        messages.syncLoanDownError + ": " + (error as Error).message
-      );
+      showError(messages.syncLoanDownError + ": " + (error as Error).message);
       setSyncStatus("");
     } finally {
       setIsSyncing(false);
@@ -349,13 +343,14 @@ export function SyncView() {
   const handleLoanSyncUp = async () => {
     setIsSyncing(true);
     setSyncStatus(messages.syncingLoanUp);
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       const pendingChanges = getPendingLoanChanges();
 
       if (pendingChanges.length === 0) {
-        setSyncStatus(messages.noPendingLoanChanges);
+        showInfo(messages.noPendingLoanChanges);
+        setSyncStatus("");
         return;
       }
 
@@ -389,9 +384,7 @@ export function SyncView() {
       );
     } catch (error) {
       console.error("Error syncing loans up:", error);
-      setErrorMessage(
-        messages.syncLoanUpError + ": " + (error as Error).message
-      );
+      showError(messages.syncLoanUpError + ": " + (error as Error).message);
       setSyncStatus("");
     } finally {
       // Clear loan change history after sync attempt (successful or not)
@@ -403,14 +396,14 @@ export function SyncView() {
   const handleClearUserChanges = async () => {
     setIsSyncing(true);
     setSyncStatus("Limpiando historial de cambios de usuarios...");
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       clearUserChanges();
-      setSyncStatus(messages.clearUserChangesComplete);
+      showSuccess(messages.clearUserChangesComplete);
     } catch (error) {
       console.error("Error clearing user changes:", error);
-      setErrorMessage(
+      showError(
         "❌ Error al limpiar cambios de usuarios: " + (error as Error).message
       );
       setSyncStatus("");
@@ -422,14 +415,14 @@ export function SyncView() {
   const handleClearAssetChanges = async () => {
     setIsSyncing(true);
     setSyncStatus("Limpiando historial de cambios de activos...");
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       clearAssetChanges();
-      setSyncStatus(messages.clearAssetChangesComplete);
+      showSuccess(messages.clearAssetChangesComplete);
     } catch (error) {
       console.error("Error clearing asset changes:", error);
-      setErrorMessage(
+      showError(
         "❌ Error al limpiar cambios de activos: " + (error as Error).message
       );
       setSyncStatus("");
@@ -441,14 +434,14 @@ export function SyncView() {
   const handleClearLoanChanges = async () => {
     setIsSyncing(true);
     setSyncStatus("Limpiando historial de cambios de préstamos...");
-    setErrorMessage("");
+    // Removed error message clear
 
     try {
       clearLoanChanges();
-      setSyncStatus(messages.clearLoanChangesComplete);
+      showSuccess(messages.clearLoanChangesComplete);
     } catch (error) {
       console.error("Error clearing loan changes:", error);
-      setErrorMessage(
+      showError(
         "❌ Error al limpiar cambios de préstamos: " + (error as Error).message
       );
       setSyncStatus("");
@@ -608,9 +601,7 @@ export function SyncView() {
         </div>
       </div>
 
-      {syncStatus && <div className="sync-status success">{syncStatus}</div>}
-
-      {errorMessage && <div className="sync-status error">{errorMessage}</div>}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }
