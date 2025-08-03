@@ -13,14 +13,12 @@ export interface SheetData {
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbzVZVn-ocnyrmQBQAlAiet_pjERi5pGZLNJZKNbB_PETYNXDGrRaHIG0HstXb2pX5BH/exec";
 
-// The ID of the specific spreadsheet for user data.
-// In a real application, this would likely come from a configuration file.
-// const TEST_DATA_SPREADSHEET_ID = "1NpKpSSxHAg4HvKNhxeVJ2uhsoR68PGZml5xJLAmuU_0";
-const USER_DATA_SPREADSHEET_ID = "1wRM66xh6MLdhTMRW6QBkZjY3jmsW3IJ5_aTmEMFxyLQ";
-const ASSETS_DATA_SPREADSHEET_ID =
-  "1eJTMrPbreyzE8bBfzDMU3YDHRmyQTLghVQuXwr56RCg";
-const LOANS_DATA_SPREADSHEET_ID =
-  "1dxZN6ZISDZsZruhorMNs1tGt1lPbenoS0U0Hu6BKJbQ"; // TODO: Replace with actual loan spreadsheet ID
+// The ID of the specific spreadsheet for user, assets, and loans data, injected via environment variables.
+const USER_DATA_SPREADSHEET_ID: string = process.env.USER_DATA_SPREADSHEET_ID!;
+const ASSETS_DATA_SPREADSHEET_ID: string =
+  process.env.ASSETS_DATA_SPREADSHEET_ID!;
+const LOANS_DATA_SPREADSHEET_ID: string =
+  process.env.LOANS_DATA_SPREADSHEET_ID!;
 
 /**
  * Base function to fetch and parse data from a Google Apps Script web app URL.

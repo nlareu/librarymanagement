@@ -7,6 +7,7 @@ import type { View } from "./types";
 import type { User } from "./entities/index";
 import { NavBar } from "./components/shared/NavBar/NavBar";
 import { CollectionView } from "./components/pages/collection/CollectionView";
+import { HomeView } from "./components/pages/home/HomeView";
 import { Modal } from "./components/shared/Modal/Modal";
 import { AssetForm } from "./components/shared/AssetForm/AssetForm";
 import { DeleteConfirmationModal } from "./components/shared/DeleteConfirmationModal/DeleteConfirmationModal";
@@ -26,7 +27,7 @@ import "./App.css";
 import { messages } from "./messages";
 
 export function App() {
-  const [view, setView] = useState<View>("collection");
+  const [view, setView] = useState<View>("home");
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [deletingUser, setDeletingUser] = useState<User | null>(null);
 
@@ -89,8 +90,11 @@ export function App() {
       <header>
         <h1>{messages.appTitle}</h1>
       </header>
-      <NavBar currentView={view} onNavigate={setView} />
+      {view !== "home" && <NavBar currentView={view} onNavigate={setView} />}
       <main className="main-content">
+        {view === "home" && (
+          <HomeView onEnterSystem={() => setView("collection")} />
+        )}
         {view === "collection" && (
           <CollectionView
             assets={assets}
