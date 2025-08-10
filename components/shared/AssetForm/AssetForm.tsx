@@ -339,27 +339,6 @@ export function AssetForm({
               </p>
             )}
           </div>
-          <div className="form-group">
-            <label htmlFor="collectionNumber">
-              {messages.collectionNumberLabel}
-            </label>
-            <input
-              id="collectionNumber"
-              type="text"
-              value={formData.collectionNumber || ""}
-              onChange={handleChange}
-              className={errors.collectionNumber ? "has-error" : ""}
-              aria-invalid={!!errors.collectionNumber}
-              aria-describedby={
-                errors.collectionNumber ? "collectionNumber-error" : undefined
-              }
-            />
-            {errors.collectionNumber && (
-              <p id="collectionNumber-error" className="field-error-message">
-                {errors.collectionNumber}
-              </p>
-            )}
-          </div>
         </div>
       </fieldset>
 

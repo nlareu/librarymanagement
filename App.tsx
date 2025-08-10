@@ -18,7 +18,7 @@ import { UserForm } from "./components/shared/UserForm/UserForm";
 import { HistoryView } from "./components/pages/history/HistoryView";
 import { SyncView } from "./components/pages/sync/SyncView";
 import { UserDetailsModal } from "./components/shared/UserDetailsModal/UserDetailsModal";
-import { stripMarcPrefix } from "./utils";
+import { MARC_MAP, stripMarcPrefix } from "./utils";
 import { useLibraryData } from "./hooks/useLibraryData";
 import { useCollectionFilters } from "./components/pages/collection/useCollectionFilters";
 import { useHistoryFilters } from "./components/pages/history/useHistoryFilters";
@@ -140,19 +140,19 @@ export function App() {
             submitButtonText={messages.addAssetSubmitButton}
             onCancel={() => setIsAddAssetModalOpen(false)}
             initialData={{
-              title: "245-",
+              title: MARC_MAP.title + "-",
               type: "Libro",
-              description: "520-",
+              description: MARC_MAP.description + "-",
               registrationNumber: "",
-              signature: "",
-              isbn: "020-",
-              author: "100-",
-              publisher: "260-",
-              publicationPlace: "260-",
-              edition: "250-",
-              publicationYear: "260-",
-              collectionTitle: "490-",
-              collectionNumber: "490-",
+              signature: MARC_MAP.signature + "-",
+              isbn: MARC_MAP.isbn + "-",
+              author: MARC_MAP.author + "-",
+              publisher: MARC_MAP.publisher,
+              publicationPlace: MARC_MAP.publicationPlace,
+              edition: MARC_MAP.edition + "-",
+              publicationYear: MARC_MAP.publicationYear,
+              collectionTitle: MARC_MAP.collectionTitle + "-",
+              // collectionNumber: MARC_MAP.collectionNumber,
               volumes: "1",
               copies: "1",
               isLoanable: true,
