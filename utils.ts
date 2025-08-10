@@ -61,22 +61,9 @@ export const MARC_MAP: Record<string, string> = {
   publicationPlace: "260-^a",
   publicationYear: "260-^c",
   collectionTitle: "440-",
-
   description: "520-",
   subjects: "650-",
 };
-
-export function addMarcPrefix(
-  value: string | undefined,
-  fieldKey: string
-): string | undefined {
-  if (!value) return value === "" ? "" : undefined;
-  const code = MARC_MAP[fieldKey];
-  if (code) {
-    return `${code}-${value}`;
-  }
-  return value;
-}
 
 export function stripMarcPrefix(
   value: string | undefined,
