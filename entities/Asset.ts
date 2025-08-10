@@ -5,9 +5,9 @@
 
 export interface Asset {
   id: string;
-  title: string;
-  type: string; // Corresponds to Formato
-  description: string;
+  title?: string;
+  type?: string; // Corresponds to Formato
+  description?: string;
 
   // New fields from image
   registrationNumber?: string;

@@ -188,9 +188,9 @@ export function App() {
           <AssetForm
             onSubmit={handleUpdateAsset}
             initialData={{
-              title: editingAsset.title,
-              type: editingAsset.type,
-              description: editingAsset.description,
+              title: editingAsset.title ?? "",
+              type: editingAsset.type ?? "Libro",
+              description: editingAsset.description ?? "",
               registrationNumber: editingAsset.registrationNumber ?? "",
               signature: editingAsset.signature ?? "",
               isbn: editingAsset.isbn ?? "",

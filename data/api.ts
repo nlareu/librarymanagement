@@ -46,9 +46,9 @@ export function addAsset(assetData: AssetFormData): Asset[] {
     type: assetData.type,
     registrationNumber: assetData.registrationNumber,
     signature: assetData.signature,
-    volumes: parseInt(assetData.volumes) || 1,
-    copies: parseInt(assetData.copies) || 1,
-    isLoanable: assetData.isLoanable,
+    volumes: assetData.volumes ? parseInt(assetData.volumes) || 1 : 1,
+    copies: assetData.copies ? parseInt(assetData.copies) || 1 : 1,
+    isLoanable: assetData.isLoanable ?? true,
   };
 
   // Track the change
@@ -118,9 +118,9 @@ export function updateAsset(
     type: updatedData.type,
     registrationNumber: updatedData.registrationNumber,
     signature: updatedData.signature,
-    volumes: parseInt(updatedData.volumes) || 1,
-    copies: parseInt(updatedData.copies) || 1,
-    isLoanable: updatedData.isLoanable,
+    volumes: updatedData.volumes ? parseInt(updatedData.volumes) || 1 : 1,
+    copies: updatedData.copies ? parseInt(updatedData.copies) || 1 : 1,
+    isLoanable: updatedData.isLoanable ?? true,
   };
 
   // Track the change
