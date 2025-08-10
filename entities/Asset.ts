@@ -5,9 +5,9 @@
 
 export interface Asset {
   id: string;
-  title: string;
-  type: string; // Corresponds to Formato
-  description: string;
+  title?: string;
+  type?: string; // Corresponds to Formato
+  description?: string;
 
   // New fields from image
   registrationNumber?: string;
@@ -19,10 +19,8 @@ export interface Asset {
   edition?: string;
   publicationYear?: string;
   collectionTitle?: string;
-  collectionNumber?: string;
   volumes?: number;
   copies?: number;
   isLoanable?: boolean;
   subjects?: string[]; // Materias
-  ibicSubjects?: string[]; // Temas (Submaterias IBIC)
 }

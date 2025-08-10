@@ -18,7 +18,7 @@ import { UserForm } from "./components/shared/UserForm/UserForm";
 import { HistoryView } from "./components/pages/history/HistoryView";
 import { SyncView } from "./components/pages/sync/SyncView";
 import { UserDetailsModal } from "./components/shared/UserDetailsModal/UserDetailsModal";
-import { stripMarcPrefix } from "./utils";
+import { MARC_MAP, stripMarcPrefix } from "./utils";
 import { useLibraryData } from "./hooks/useLibraryData";
 import { useCollectionFilters } from "./components/pages/collection/useCollectionFilters";
 import { useHistoryFilters } from "./components/pages/history/useHistoryFilters";
@@ -140,24 +140,23 @@ export function App() {
             submitButtonText={messages.addAssetSubmitButton}
             onCancel={() => setIsAddAssetModalOpen(false)}
             initialData={{
-              title: "245-",
+              title: MARC_MAP.title,
               type: "Libro",
-              description: "520-",
+              description: MARC_MAP.description,
               registrationNumber: "",
-              signature: "",
-              isbn: "020-",
-              author: "100-",
-              publisher: "260-",
-              publicationPlace: "260-",
-              edition: "250-",
-              publicationYear: "260-",
-              collectionTitle: "490-",
-              collectionNumber: "490-",
+              signature: MARC_MAP.signature,
+              isbn: MARC_MAP.isbn,
+              author: MARC_MAP.author,
+              publisher: MARC_MAP.publisher,
+              publicationPlace: MARC_MAP.publicationPlace,
+              edition: MARC_MAP.edition,
+              publicationYear: MARC_MAP.publicationYear,
+              collectionTitle: MARC_MAP.collectionTitle,
+
               volumes: "1",
               copies: "1",
               isLoanable: true,
               subjects: [],
-              ibicSubjects: [],
             }}
           />
         </Modal>
@@ -188,9 +187,9 @@ export function App() {
           <AssetForm
             onSubmit={handleUpdateAsset}
             initialData={{
-              title: editingAsset.title,
-              type: editingAsset.type,
-              description: editingAsset.description,
+              title: editingAsset.title ?? "",
+              type: editingAsset.type ?? "Libro",
+              description: editingAsset.description ?? "",
               registrationNumber: editingAsset.registrationNumber ?? "",
               signature: editingAsset.signature ?? "",
               isbn: editingAsset.isbn ?? "",
@@ -200,12 +199,10 @@ export function App() {
               edition: editingAsset.edition ?? "",
               publicationYear: editingAsset.publicationYear ?? "",
               collectionTitle: editingAsset.collectionTitle ?? "",
-              collectionNumber: editingAsset.collectionNumber ?? "",
               volumes: String(editingAsset.volumes ?? "1"),
               copies: String(editingAsset.copies ?? "1"),
               isLoanable: editingAsset.isLoanable ?? true,
               subjects: editingAsset.subjects ?? [],
-              ibicSubjects: editingAsset.ibicSubjects ?? [],
             }}
             submitButtonText={messages.saveChanges}
             onCancel={() => setEditingAsset(null)}

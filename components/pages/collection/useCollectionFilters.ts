@@ -16,7 +16,11 @@ export function useCollectionFilters(assets: Asset[]) {
   }, []);
 
   const availableAssetTypes = useMemo(() => {
-    const types = new Set(assets.map((a) => a.type));
+    const types = new Set(
+      assets
+        .map((a) => a.type)
+        .filter((type): type is string => type !== undefined)
+    );
     return Array.from(types).sort();
   }, [assets]);
 
@@ -32,7 +36,8 @@ export function useCollectionFilters(assets: Asset[]) {
           .includes(searchText.toLowerCase());
 
       const typeMatch =
-        typeFilters.length === 0 || typeFilters.includes(asset.type);
+        typeFilters.length === 0 ||
+        (asset.type && typeFilters.includes(asset.type));
 
       return searchMatch && typeMatch;
     });

@@ -23,12 +23,10 @@ export interface AssetChange {
     edition?: string;
     publicationYear?: string;
     collectionTitle?: string;
-    collectionNumber?: string;
     volumes?: string;
     copies?: string;
     isLoanable?: boolean;
     subjects?: string[];
-    ibicSubjects?: string[];
   };
   newData?: {
     title?: string;
@@ -43,12 +41,10 @@ export interface AssetChange {
     edition?: string;
     publicationYear?: string;
     collectionTitle?: string;
-    collectionNumber?: string;
     volumes?: string;
     copies?: string;
     isLoanable?: boolean;
     subjects?: string[];
-    ibicSubjects?: string[];
   };
   synced: boolean;
 }
