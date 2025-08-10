@@ -23,7 +23,6 @@ export interface AssetChange {
     edition?: string;
     publicationYear?: string;
     collectionTitle?: string;
-    collectionNumber?: string;
     volumes?: string;
     copies?: string;
     isLoanable?: boolean;
@@ -42,7 +41,6 @@ export interface AssetChange {
     edition?: string;
     publicationYear?: string;
     collectionTitle?: string;
-    collectionNumber?: string;
     volumes?: string;
     copies?: string;
     isLoanable?: boolean;

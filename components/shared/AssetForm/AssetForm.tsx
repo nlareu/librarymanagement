@@ -35,7 +35,6 @@ export function AssetForm({
       edition: "",
       publicationYear: "",
       collectionTitle: "",
-      collectionNumber: "",
       volumes: "1",
       copies: "1",
       isLoanable: true,
@@ -122,7 +121,6 @@ export function AssetForm({
       "edition",
       "publicationYear",
       "collectionTitle",
-      "collectionNumber",
     ];
 
     fieldsToValidate.forEach((field) => {

@@ -61,7 +61,7 @@ export const MARC_MAP: Record<string, string> = {
   publicationPlace: "260-^a",
   publicationYear: "260-^c",
   collectionTitle: "440-",
-  // collectionNumber: '490',
+
   description: "520-",
   subjects: "650-",
 };

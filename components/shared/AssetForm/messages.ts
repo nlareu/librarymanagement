@@ -23,7 +23,6 @@ export const messages = {
   yearLabel: "Año",
   collectionLegend: "Colección",
   collectionTitleLabel: "Colección",
-  collectionNumberLabel: "Número en Colección",
   physicalLegend: "Detalles Físicos",
   volumesLabel: "Volúmenes",
   copiesLabel: "Ejemplares",

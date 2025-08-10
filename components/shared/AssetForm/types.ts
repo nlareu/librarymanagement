@@ -18,7 +18,6 @@ export interface AssetFormData {
   edition?: string;
   publicationYear?: string; // Use string for form input
   collectionTitle?: string;
-  collectionNumber?: string;
   volumes?: string;
   copies?: string;
   isLoanable?: boolean;

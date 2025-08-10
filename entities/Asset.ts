@@ -19,7 +19,6 @@ export interface Asset {
   edition?: string;
   publicationYear?: string;
   collectionTitle?: string;
-  collectionNumber?: string;
   volumes?: number;
   copies?: number;
   isLoanable?: boolean;

@@ -152,7 +152,7 @@ export function App() {
               edition: MARC_MAP.edition,
               publicationYear: MARC_MAP.publicationYear,
               collectionTitle: MARC_MAP.collectionTitle,
-              // collectionNumber: MARC_MAP.collectionNumber,
+
               volumes: "1",
               copies: "1",
               isLoanable: true,
@@ -199,7 +199,6 @@ export function App() {
               edition: editingAsset.edition ?? "",
               publicationYear: editingAsset.publicationYear ?? "",
               collectionTitle: editingAsset.collectionTitle ?? "",
-              collectionNumber: editingAsset.collectionNumber ?? "",
               volumes: String(editingAsset.volumes ?? "1"),
               copies: String(editingAsset.copies ?? "1"),
               isLoanable: editingAsset.isLoanable ?? true,

@@ -162,7 +162,6 @@ export function SyncView() {
         edition: row.edition || "",
         publicationYear: row.publicationYear || "",
         collectionTitle: row.collectionTitle || "",
-        collectionNumber: row.collectionNumber || "",
         subjects: row.subjects
           ? row.subjects.split(",").map((s) => s.trim())
           : [],
@@ -225,7 +224,6 @@ export function SyncView() {
               edition: change.newData.edition || "",
               publicationYear: change.newData.publicationYear || "",
               collectionTitle: change.newData.collectionTitle || "",
-              collectionNumber: change.newData.collectionNumber || "",
               subjects: Array.isArray(change.newData.subjects)
                 ? change.newData.subjects.join(", ")
                 : change.newData.subjects || "",
