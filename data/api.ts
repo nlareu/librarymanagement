@@ -42,7 +42,6 @@ export function addAsset(assetData: AssetFormData): Asset[] {
     collectionTitle: assetData.collectionTitle,
     collectionNumber: assetData.collectionNumber,
     subjects: assetData.subjects,
-    ibicSubjects: assetData.ibicSubjects,
     type: assetData.type,
     registrationNumber: assetData.registrationNumber,
     signature: assetData.signature,
@@ -75,7 +74,6 @@ export function addAsset(assetData: AssetFormData): Asset[] {
       copies: (newAsset.copies || 1).toString(),
       isLoanable: newAsset.isLoanable,
       subjects: newAsset.subjects,
-      ibicSubjects: newAsset.ibicSubjects,
     },
     synced: false,
   };
@@ -114,7 +112,6 @@ export function updateAsset(
     collectionTitle: updatedData.collectionTitle,
     collectionNumber: updatedData.collectionNumber,
     subjects: updatedData.subjects,
-    ibicSubjects: updatedData.ibicSubjects,
     type: updatedData.type,
     registrationNumber: updatedData.registrationNumber,
     signature: updatedData.signature,
@@ -147,7 +144,6 @@ export function updateAsset(
       copies: (oldAsset.copies || 1).toString(),
       isLoanable: oldAsset.isLoanable,
       subjects: oldAsset.subjects,
-      ibicSubjects: oldAsset.ibicSubjects,
     },
     newData: {
       title: updatedAsset.title,
@@ -167,7 +163,6 @@ export function updateAsset(
       copies: (updatedAsset.copies || 1).toString(),
       isLoanable: updatedAsset.isLoanable,
       subjects: updatedAsset.subjects,
-      ibicSubjects: updatedAsset.ibicSubjects,
     },
     synced: false,
   };
@@ -209,7 +204,6 @@ export function deleteAsset(assetId: string) {
         copies: (assetToDelete.copies || 1).toString(),
         isLoanable: assetToDelete.isLoanable,
         subjects: assetToDelete.subjects,
-        ibicSubjects: assetToDelete.ibicSubjects,
       },
       synced: false,
     };

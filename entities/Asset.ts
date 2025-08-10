@@ -24,5 +24,4 @@ export interface Asset {
   copies?: number;
   isLoanable?: boolean;
   subjects?: string[]; // Materias
-  ibicSubjects?: string[]; // Temas (Submaterias IBIC)
 }

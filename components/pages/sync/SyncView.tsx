@@ -166,9 +166,6 @@ export function SyncView() {
         subjects: row.subjects
           ? row.subjects.split(",").map((s) => s.trim())
           : [],
-        ibicSubjects: row.ibicSubjects
-          ? row.ibicSubjects.split(",").map((s) => s.trim())
-          : [],
         type: (row.type as Asset["type"]) || "Libro",
         registrationNumber: row.registrationNumber || "",
         signature: row.signature || "",
@@ -232,9 +229,6 @@ export function SyncView() {
               subjects: Array.isArray(change.newData.subjects)
                 ? change.newData.subjects.join(", ")
                 : change.newData.subjects || "",
-              ibicSubjects: Array.isArray(change.newData.ibicSubjects)
-                ? change.newData.ibicSubjects.join(", ")
-                : change.newData.ibicSubjects || "",
               type: change.newData.type || "",
               registrationNumber: change.newData.registrationNumber || "",
               signature: change.newData.signature || "",

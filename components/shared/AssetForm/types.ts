@@ -23,5 +23,4 @@ export interface AssetFormData {
   copies?: string;
   isLoanable?: boolean;
   subjects?: string[];
-  ibicSubjects?: string[];
 }

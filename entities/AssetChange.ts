@@ -28,7 +28,6 @@ export interface AssetChange {
     copies?: string;
     isLoanable?: boolean;
     subjects?: string[];
-    ibicSubjects?: string[];
   };
   newData?: {
     title?: string;
@@ -48,7 +47,6 @@ export interface AssetChange {
     copies?: string;
     isLoanable?: boolean;
     subjects?: string[];
-    ibicSubjects?: string[];
   };
   synced: boolean;
 }

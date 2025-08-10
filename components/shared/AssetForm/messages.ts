@@ -35,8 +35,6 @@ export const messages = {
   subjectsLabel: "Materias",
   addSubjectPlaceholder: "Añadir materia (sin prefijo) y presionar Enter",
   addAction: "Añadir",
-  ibicSubjectsLabel: "Temas (Submaterias IBIC)",
-  addIbicSubjectPlaceholder: "Añadir tema IBIC (sin prefijo) y presionar Enter",
   cancelAction: "Cancelar",
   validation: {
     prefixAndValue: "Debe incluir el prefijo {prefix}.",

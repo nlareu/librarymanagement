@@ -64,7 +64,6 @@ export const MARC_MAP: Record<string, string> = {
   // collectionNumber: '490',
   description: "520",
   subjects: "650",
-  ibicSubjects: "650",
 };
 
 export function addMarcPrefix(

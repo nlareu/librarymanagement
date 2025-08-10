@@ -40,7 +40,6 @@ export function AssetForm({
       copies: "1",
       isLoanable: true,
       subjects: [],
-      ibicSubjects: [],
     }
   );
   const [errors, setErrors] = useState<
@@ -48,7 +47,6 @@ export function AssetForm({
   >({});
 
   const [newSubject, setNewSubject] = useState("");
-  const [newIbicSubject, setNewIbicSubject] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -67,7 +65,7 @@ export function AssetForm({
   const handleAddTag = (
     tagValue: string,
     stateSetter: React.Dispatch<React.SetStateAction<string>>,
-    formDataKey: "subjects" | "ibicSubjects"
+    formDataKey: "subjects"
   ) => {
     if (!tagValue.trim()) return;
 
@@ -91,10 +89,7 @@ export function AssetForm({
   };
 
   // Generic handler for removing a tag
-  const handleRemoveTag = (
-    indexToRemove: number,
-    formDataKey: "subjects" | "ibicSubjects"
-  ) => {
+  const handleRemoveTag = (indexToRemove: number, formDataKey: "subjects") => {
     const currentArray = formData[formDataKey] || [];
     setFormData((prev) => ({
       ...prev,
@@ -106,7 +101,7 @@ export function AssetForm({
     e: KeyboardEvent<HTMLInputElement>,
     tagValue: string,
     stateSetter: React.Dispatch<React.SetStateAction<string>>,
-    formDataKey: "subjects" | "ibicSubjects"
+    formDataKey: "subjects"
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -450,49 +445,6 @@ export function AssetForm({
               className="btn btn-secondary btn-sm"
               onClick={() =>
                 handleAddTag(newSubject, setNewSubject, "subjects")
-              }
-            >
-              {messages.addAction}
-            </button>
-          </div>
-        </div>
-        <div className="tag-input-section">
-          <h5>{messages.ibicSubjectsLabel}</h5>
-          {formData.ibicSubjects && formData.ibicSubjects.length > 0 && (
-            <div className="tags-list">
-              {formData.ibicSubjects.map((subject, index) => (
-                <div key={index} className="tag-item">
-                  <span>{subject}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTag(index, "ibicSubjects")}
-                  >
-                    &times;
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="tag-add-form">
-            <input
-              type="text"
-              value={newIbicSubject}
-              onChange={(e) => setNewIbicSubject(e.target.value)}
-              onKeyDown={(e) =>
-                handleTagInputKeyDown(
-                  e,
-                  newIbicSubject,
-                  setNewIbicSubject,
-                  "ibicSubjects"
-                )
-              }
-              placeholder={messages.addIbicSubjectPlaceholder}
-            />
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={() =>
-                handleAddTag(newIbicSubject, setNewIbicSubject, "ibicSubjects")
               }
             >
               {messages.addAction}

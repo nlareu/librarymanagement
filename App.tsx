@@ -157,7 +157,6 @@ export function App() {
               copies: "1",
               isLoanable: true,
               subjects: [],
-              ibicSubjects: [],
             }}
           />
         </Modal>
@@ -205,7 +204,6 @@ export function App() {
               copies: String(editingAsset.copies ?? "1"),
               isLoanable: editingAsset.isLoanable ?? true,
               subjects: editingAsset.subjects ?? [],
-              ibicSubjects: editingAsset.ibicSubjects ?? [],
             }}
             submitButtonText={messages.saveChanges}
             onCancel={() => setEditingAsset(null)}
