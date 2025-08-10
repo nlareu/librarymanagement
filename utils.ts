@@ -52,18 +52,18 @@ export const parseDateStringAsLocal = (dateString: string): Date | null => {
 };
 
 export const MARC_MAP: Record<string, string> = {
-  isbn: "020",
-  signature: "080",
-  author: "100",
-  title: "245",
-  edition: "250",
+  isbn: "020-",
+  signature: "080-",
+  author: "100-",
+  title: "245-",
+  edition: "250-",
   publisher: "260-^b",
   publicationPlace: "260-^a",
   publicationYear: "260-^c",
-  collectionTitle: "440",
+  collectionTitle: "440-",
   // collectionNumber: '490',
-  description: "520",
-  subjects: "650",
+  description: "520-",
+  subjects: "650-",
 };
 
 export function addMarcPrefix(

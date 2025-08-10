@@ -71,7 +71,7 @@ export function AssetForm({
 
     const prefix = MARC_MAP[formDataKey];
     const valueWithPrefix = prefix
-      ? `${prefix}-${tagValue.trim()}`
+      ? `${prefix}${tagValue.trim()}`
       : tagValue.trim();
 
     // Prevent adding duplicates
@@ -131,7 +131,7 @@ export function AssetForm({
 
       if (code && value) {
         // Only validate if there is a code
-        const prefix = `${code}-`;
+        const prefix = `${code}`;
         if (!value.startsWith(prefix)) {
           newErrors[field] = messages.validation.prefixAndValue.replace(
             "{prefix}",
